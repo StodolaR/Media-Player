@@ -22,6 +22,12 @@ namespace Media_Player
             }
         }
         public ObservableCollection<string> Paths { get; set; }
+        public Playlist()
+        {
+            this.name = string.Empty;
+            Name = string.Empty;
+            Paths = new ObservableCollection<string>();
+        }
         public Playlist(string name)
         {
             this.name = name;

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Media_Player
 {
-    internal class PlaylistCollectionsFile
+    public class PlaylistCollectionsFile
     {
         public ObservableCollection<Playlist> picturePlaylists {  get; set; }
         public ObservableCollection<Playlist> audioPlaylists { get; set; }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Xml.Serialization;
 
 namespace Media_Player
 {
@@ -41,6 +43,7 @@ namespace Media_Player
             allPlaylists = new PlaylistCollectionsFile();
             ActualPlaylists = new ObservableCollection<Playlist>();
             finalResult = new List<string>();
+            DeserializePlaylists();
             if (IsVideoPlaylist)
             {
                 GetVideoPlaylists();
@@ -57,6 +60,24 @@ namespace Media_Player
             if (PropertyChanged != null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+        private void DeserializePlaylists()
+        {
+            try
+            {
+                if(File.Exists("playlists.xml"))
+                {
+                    XmlSerializer serializer = new XmlSerializer(allPlaylists.GetType());
+                    using(StreamReader sr = new StreamReader("playlists.xml"))
+                    {
+                        allPlaylists = (PlaylistCollectionsFile)serializer.Deserialize(sr);
+                    }
+                }
+            }
+            catch (Exception ex) 
+            {
+                MessageBox.Show(ex.Message + ex.InnerException);
             }
         }
         private void GetVideoPlaylists()
@@ -160,8 +181,24 @@ namespace Media_Player
                     finalResult.Add(selectedPlaylist.Paths[i]);
                 }
                 finalResult.Add(tbPlaylistType.Text);
+                SerializePlaylists();
             }
             this.Close();
+        }
+        private void SerializePlaylists()
+        {
+            try
+            {
+                XmlSerializer serializer = new XmlSerializer(allPlaylists.GetType());
+                using (StreamWriter sw = new StreamWriter("playlists.xml"))
+                {
+                    serializer.Serialize(sw, allPlaylists);
+                }
+            }
+            catch (Exception ex) 
+            {
+                MessageBox.Show(ex.Message + ex.InnerException);
+            }
         }
     }
 }
