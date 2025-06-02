@@ -1,0 +1,59 @@
+﻿<Window x:Class="Media_Player.PlaylistWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Media_Player"
+        mc:Ignorable="d"
+        Title="PlaylistWindow" Height="450" Width="800">
+    <Grid>
+        <DockPanel>
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                <TextBlock Text="Playlist " FontSize="20"/>
+                <TextBlock x:Name="tbPlaylistType"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+                <StackPanel Orientation="Horizontal" Width="250">
+                    <Button x:Name="btnNew" Content="Nový" Click="btnNew_Click"/>
+                    <Button x:Name="btnRename" Content="Prejmenuj" Click="btnRename_Click"/>
+                    <Popup x:Name="popNewName" Placement="Bottom" PlacementTarget="{Binding ElementName=btnNew}">
+                        <StackPanel>
+                            <TextBlock Text="Zadej název playlistu:" Background="White"/>
+                            <TextBox x:Name="tbNewName" Width="250"/>
+                            <StackPanel Orientation="Horizontal">
+                                <Button x:Name="btnOk" Content="Potvrď" Click="btnOk_Click" Width="125"/>
+                                <Button x:Name="btnCancel" Content="Zruš" Click="btnCancel_Click" Width="125"/>
+                            </StackPanel>
+
+                        </StackPanel>
+                    </Popup>
+                    <Button x:Name="btnRemove" Content="Smaž" Click="btnRemove_Click"/>
+                    <ToggleButton x:Name="btnPictures" Content="Audio/obrázky" Click="btnPictures_Click"/>
+                </StackPanel>
+                <WrapPanel>
+                    <TextBlock Text="Spusť playlist: "/>
+                    <Button x:Name="btnFromBegin" Content="od začátku" Click="btnFromBegin_Click"/>
+                    <TextBlock Text="/"/>
+                    <Button x:Name="btnFromSelect" Content="od výběru"/>
+                </WrapPanel>
+            </StackPanel>
+            <ListBox x:Name="lbPlaylists" DockPanel.Dock="Left" Width="250" ItemsSource="{Binding ActualPlaylists}" 
+                     SelectedItem="{Binding SelectedPlaylist}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <StackPanel VerticalAlignment="Center" DockPanel.Dock="Right">
+                <Button x:Name="btnUp" Content="Nahoru"/>
+                <Button x:Name="btnAddFolder" Content="Přidej složku"/>
+                <Button x:Name="btnAddFile" Content="Přidej soubor" Click="btnAddFile_Click"/>
+                <Button x:Name="btnRemovePath" Content="Smaž"/>
+                <Button x:Name="btnDown" Content="Dolu"/>
+            </StackPanel>
+            <ListBox x:Name="lbFilenames" ItemsSource="{Binding SelectedPlaylist.Paths}"/>
+        </DockPanel>
+        
+    </Grid>
+</Window>
