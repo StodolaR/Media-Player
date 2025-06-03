@@ -21,8 +21,12 @@ namespace Media_Player
     public partial class MainWindow : Window
     {
         private bool positionAdjustment;
+        private int playlistCounter;
         private List<string> mediaPlaylist;
         private List<string> picturesPlaylist;
+        public const string videoExtensions = "mov;mp4";
+        public const string audioExtensions = "mp3";
+        public const string pictureExtensions = "jpg";
         public MainWindow()
         {
             InitializeComponent();
@@ -49,19 +53,21 @@ namespace Media_Player
             OpenFileDialog ofd = new OpenFileDialog();
             if (btnVideo.IsChecked == true )
             {
-                ofd.Filter = "*.mov;*.mp4|*.mov;*.mp4";
+                ofd.Filter = GetFilterString(videoExtensions);
                 if(ofd.ShowDialog() == true)
                 {
+                    mediaPlaylist.Add(ofd.FileName);
                     SetPanelAndPlay(ofd.FileName);
                 }
             }
             else
             {
-                ofd.Filter = "*.mp3|*.mp3|*.jpg|*.jpg";
+                ofd.Filter = GetFilterString(audioExtensions) + "|" + GetFilterString(pictureExtensions);
                 if( ofd.ShowDialog() == true )
                 {
                     if(ofd.FileName.EndsWith("mp3"))
                     {
+                        mediaPlaylist.Add(ofd.FileName);
                         SetPanelAndPlay(ofd.FileName);
                     }
                     else
@@ -71,13 +77,25 @@ namespace Media_Player
                 }
             }
         }
+        public static string GetFilterString(string extensions)
+        {
+            string[] extensionsArray = extensions.Split(';');
+            string filterString = string.Empty;
+            foreach (string extension in extensionsArray)
+            {
+                filterString += "*." + extension + ";";
+            }
+            filterString = filterString.Trim(';');
+            return filterString + "|" + filterString;
+        }
         private void SetPanelAndPlay(string fileName)
         {
             btnPause.IsChecked = false;
             btnPause.IsEnabled = true;
             tbFilename.Text = System.IO.Path.GetFileName(fileName);
-            mediaPlaylist.Add(fileName);
             mePlayer.Source = new Uri(mediaPlaylist[0]);
+            playlistCounter = 0;
+            slProgress.Value = 0;
             mePlayer.Play();
         }
 
@@ -159,8 +177,7 @@ namespace Media_Player
                     {
                         playlistWindow.finalResult.Remove(playlistWindow.finalResult.Last());
                         mediaPlaylist = playlistWindow.finalResult;
-                        mePlayer.Source = new Uri(mediaPlaylist[0]);
-                        mePlayer.Play();
+                        SetPanelAndPlay(mediaPlaylist[0]);
                     }
                 }
             }  
@@ -168,13 +185,9 @@ namespace Media_Player
 
         private void mePlayer_MediaEnded(object sender, RoutedEventArgs e)
         {
-            string lastMediumPath = mePlayer.Source.LocalPath;
-            int lastIndex = mediaPlaylist.IndexOf(lastMediumPath);
+            if ((++playlistCounter) == mediaPlaylist.Count) return;
+            mePlayer.Source = new Uri(mediaPlaylist[playlistCounter]);
             slProgress.Value = 0;
-            if ( lastIndex < mediaPlaylist.Count -1)
-            {
-                mePlayer.Source = new Uri(mediaPlaylist[lastIndex + 1]);
-            }
         }
     }
 }

@@ -3,8 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics.Metrics;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -40,17 +42,15 @@ namespace Media_Player
         public PlaylistWindow(bool IsVideoPlaylist)
         {
             InitializeComponent();
-            allPlaylists = new PlaylistCollectionsFile();
-            ActualPlaylists = new ObservableCollection<Playlist>();
+            allPlaylists = DeserializePlaylists();
             finalResult = new List<string>();
-            DeserializePlaylists();
             if (IsVideoPlaylist)
             {
-                GetVideoPlaylists();
+                ActualPlaylists = GetVideoPlaylists();
             }
             else
             {
-                GetAudioPlaylists();
+                ActualPlaylists = GetAudioPlaylists();
             }
             DataContext = this;
         }
@@ -62,16 +62,16 @@ namespace Media_Player
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
-        private void DeserializePlaylists()
+        private PlaylistCollectionsFile DeserializePlaylists()
         {
             try
             {
                 if(File.Exists("playlists.xml"))
                 {
-                    XmlSerializer serializer = new XmlSerializer(allPlaylists.GetType());
+                    XmlSerializer serializer = new XmlSerializer(typeof(PlaylistCollectionsFile));
                     using(StreamReader sr = new StreamReader("playlists.xml"))
                     {
-                        allPlaylists = (PlaylistCollectionsFile)serializer.Deserialize(sr);
+                        return (PlaylistCollectionsFile)serializer.Deserialize(sr);
                     }
                 }
             }
@@ -79,22 +79,23 @@ namespace Media_Player
             {
                 MessageBox.Show(ex.Message + ex.InnerException);
             }
+            return new PlaylistCollectionsFile();
         }
-        private void GetVideoPlaylists()
+        private ObservableCollection<Playlist> GetVideoPlaylists()
         {
             tbPlaylistType.Text = "(video)";
             btnPictures.Visibility = Visibility.Collapsed;
-            ActualPlaylists = allPlaylists.videoPlaylists;
+            return allPlaylists.videoPlaylists;
         }
-        private void GetAudioPlaylists()
+        private ObservableCollection<Playlist> GetAudioPlaylists()
         {
             tbPlaylistType.Text = "(audio)";
-            ActualPlaylists = allPlaylists.audioPlaylists;
+            return allPlaylists.audioPlaylists;
         }
-        private void GetPicturePlaylists()
+        private ObservableCollection<Playlist> GetPicturePlaylists()
         {
             tbPlaylistType.Text = "(obrázky)";
-            ActualPlaylists = allPlaylists.picturePlaylists;
+            return allPlaylists.picturePlaylists;
         }
 
         private void btnPictures_Click(object sender, RoutedEventArgs e)
@@ -161,9 +162,9 @@ namespace Media_Player
             OpenFileDialog ofd = new OpenFileDialog();
             switch(tbPlaylistType.Text)
             {
-                case "(video)" : ofd.Filter = "*.mov;*.mp4|*.mov;*.mp4";break;
-                case "(audio)": ofd.Filter = "*.mp3|*.mp3"; break;
-                case "(obrázky)": ofd.Filter = "*.jpg|*.jpg"; break;
+                case "(video)" : ofd.Filter = MainWindow.GetFilterString(MainWindow.videoExtensions); break;
+                case "(audio)": ofd.Filter = MainWindow.GetFilterString(MainWindow.audioExtensions); break;
+                case "(obrázky)": ofd.Filter = MainWindow.GetFilterString(MainWindow.pictureExtensions); break;
             }
             if(ofd.ShowDialog() == true)
             {
@@ -173,14 +174,17 @@ namespace Media_Player
 
         private void btnFromBegin_Click(object sender, RoutedEventArgs e)
         {
-            this.DialogResult = true;
             if (selectedPlaylist != null)
             {
                 for (int i = 0; i < selectedPlaylist.Paths.Count; i++) 
                 {
-                    finalResult.Add(selectedPlaylist.Paths[i]);
+                    if (!selectedPlaylist.Paths[i].EndsWith("]"))
+                    {
+                        finalResult.Add(selectedPlaylist.Paths[i]);
+                    }
                 }
                 finalResult.Add(tbPlaylistType.Text);
+                this.DialogResult = true;
                 SerializePlaylists();
             }
             this.Close();
@@ -198,6 +202,36 @@ namespace Media_Player
             catch (Exception ex) 
             {
                 MessageBox.Show(ex.Message + ex.InnerException);
+            }
+        }
+
+        private void btnAddFolder_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectedPlaylist == null) return;
+            OpenFolderDialog ofold = new OpenFolderDialog();
+            if (ofold.ShowDialog() == true)
+            {
+                string[] filesInFolder = Directory.GetFiles(ofold.FolderName);
+                SelectedPlaylist.Paths.Add(ofold.FolderName + "[složka]");
+                string[] searchedExtensions = new string[0];
+                switch (tbPlaylistType.Text)
+                {
+                    case "(video)": searchedExtensions = MainWindow.videoExtensions.Split(';'); break;
+                    case "(audio)": searchedExtensions = MainWindow.audioExtensions.Split(';'); break;
+                    case "(obrázky)": searchedExtensions = MainWindow.pictureExtensions.Split(';'); break;
+                }
+                foreach(string file in filesInFolder)
+                {
+                    foreach(string extension in searchedExtensions)
+                    {
+                        if (file.EndsWith(extension))
+                        {
+                            SelectedPlaylist.Paths.Add(file);
+                            break;
+                        }
+                    }
+                }
+                SelectedPlaylist.Paths.Add("[Konec složky]");
             }
         }
     }
