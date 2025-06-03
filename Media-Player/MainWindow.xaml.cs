@@ -104,10 +104,7 @@ namespace Media_Player
             imPicture.Source = null;
             if(mePlayer.Source != null && mePlayer.Source.AbsolutePath.EndsWith("mp3"))
             {
-                slProgress.Value = 0;
-                mePlayer.Source = null;
-                btnPause.IsChecked = false;
-                btnPause.IsEnabled = false;
+                MediaChangeReset();
             }
            
         }
@@ -116,12 +113,16 @@ namespace Media_Player
         {
             if (mePlayer.Source != null && mePlayer.Source.AbsolutePath.EndsWith("mov"))
             {
-                slProgress.Value = 0;
-                mePlayer.Source = null;
-                btnPause.IsChecked = false;
-                btnPause.IsEnabled = false;
-            }
-            
+                MediaChangeReset();
+            }  
+        }
+        private void MediaChangeReset()
+        {
+            slProgress.Value = 0;
+            tbProgressTime.Text = "0:00:00/0:00:00";
+            mePlayer.Source = null;
+            btnPause.IsChecked = false;
+            btnPause.IsEnabled = false;
         }
 
         private void btnPause_Checked(object sender, RoutedEventArgs e)
@@ -188,6 +189,23 @@ namespace Media_Player
             if ((++playlistCounter) == mediaPlaylist.Count) return;
             mePlayer.Source = new Uri(mediaPlaylist[playlistCounter]);
             slProgress.Value = 0;
+            tbFilename.Text = System.IO.Path.GetFileName(mediaPlaylist[playlistCounter]);
+        }
+
+        private void btnLast_Click(object sender, RoutedEventArgs e)
+        {
+            if(playlistCounter == 0) return;
+            mePlayer.Source = new Uri(mediaPlaylist[--playlistCounter]);
+            slProgress.Value = 0;
+            tbFilename.Text = System.IO.Path.GetFileName(mediaPlaylist[playlistCounter]);
+        }
+
+        private void btnNext_Click(object sender, RoutedEventArgs e)
+        {
+            if ((playlistCounter) == mediaPlaylist.Count-1) return;
+            mePlayer.Source = new Uri(mediaPlaylist[++playlistCounter]);
+            slProgress.Value = 0;
+            tbFilename.Text = System.IO.Path.GetFileName(mediaPlaylist[playlistCounter]);
         }
     }
 }

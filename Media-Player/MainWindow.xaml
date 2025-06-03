@@ -17,9 +17,9 @@
             <Image x:Name="imPicture"/>
         </DockPanel>
         <DockPanel x:Name="dpControlPanel" Height="60" Grid.Row="1">
-            <Button x:Name="btnLast" Content="Last" DockPanel.Dock="Left"/>
+            <Button x:Name="btnLast" Content="Last" DockPanel.Dock="Left" Click="btnLast_Click"/>
             <ToggleButton x:Name="btnPause" Content="Pause" DockPanel.Dock="Left" Width="35" IsEnabled="False" Checked="btnPause_Checked" Unchecked="btnPause_Unchecked"/>
-            <Button x:Name="btnNext" Content="Next" DockPanel.Dock="Left"/>
+            <Button x:Name="btnNext" Content="Next" DockPanel.Dock="Left" Click="btnNext_Click"/>
             <Slider x:Name="slProgress" DockPanel.Dock="Top" IsMoveToPointEnabled="True" Thumb.DragStarted="slProgress_DragStarted" 
                     Thumb.DragCompleted="slProgress_DragCompleted" ValueChanged="slProgress_ValueChanged"/>
             <DockPanel x:Name="Controls" DockPanel.Dock="Bottom">
