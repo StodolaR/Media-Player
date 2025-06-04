@@ -189,7 +189,14 @@ namespace Media_Player
             }
             if(ofd.ShowDialog() == true)
             {
-                SelectedPlaylist.Paths.Add(ofd.FileName);
+                if (rbAddToEnd.IsChecked == true || lbFilenames.SelectedItem == null)
+                {
+                    SelectedPlaylist.Paths.Add(ofd.FileName);
+                }
+                else
+                {
+                    SelectedPlaylist.Paths.Insert(lbFilenames.SelectedIndex, ofd.FileName);
+                }
             }
         }
 
@@ -241,7 +248,6 @@ namespace Media_Player
             if (ofold.ShowDialog() == true)
             {
                 string[] filesInFolder = Directory.GetFiles(ofold.FolderName);
-                SelectedPlaylist.Paths.Add(ofold.FolderName + "[složka]");
                 string[] searchedExtensions = new string[0];
                 switch (tbPlaylistType.Text)
                 {
@@ -249,40 +255,50 @@ namespace Media_Player
                     case "(audio)": searchedExtensions = MainWindow.audioExtensions.Split(';'); break;
                     case "(obrázky)": searchedExtensions = MainWindow.pictureExtensions.Split(';'); break;
                 }
-                foreach(string file in filesInFolder)
+                int insertIndex;
+                if (rbAddToEnd.IsChecked == true || lbFilenames.SelectedItem == null)
+                {
+                    insertIndex = SelectedPlaylist.Paths.Count;
+                }
+                else
+                {
+                    insertIndex = lbFilenames.SelectedIndex;
+                }
+                SelectedPlaylist.Paths.Insert(insertIndex++, ofold.FolderName + "[složka]");
+                foreach (string file in filesInFolder)
                 {
                     foreach(string extension in searchedExtensions)
                     {
                         if (file.EndsWith(extension))
                         {
-                            SelectedPlaylist.Paths.Add(file);
+                            SelectedPlaylist.Paths.Insert(insertIndex++, file);
                             break;
                         }
                     }
                 }
-                SelectedPlaylist.Paths.Add("[Konec složky]");
+                SelectedPlaylist.Paths.Insert(insertIndex, "[Konec složky]");
             }
         }
 
         private void btnRemovePath_Click(object sender, RoutedEventArgs e)
         {
-            if (lbFilenames.SelectedItem == null || selectedPlaylist == null || ((string)lbFilenames.SelectedItem).StartsWith("[")) return;
+            if (lbFilenames.SelectedItem == null || SelectedPlaylist == null ||((string)lbFilenames.SelectedItem).StartsWith("[")) return;
             int index = lbFilenames.SelectedIndex;
             if (((string)lbFilenames.SelectedItem).EndsWith("]"))
             {
                 bool folderRemoved = false;
                 while (!folderRemoved)
                 {
-                    if (selectedPlaylist.Paths[index].StartsWith("["))
+                    if (SelectedPlaylist.Paths[index].StartsWith("["))
                     {
                         folderRemoved = true;
                     }
-                    selectedPlaylist.Paths.RemoveAt(index);
+                    SelectedPlaylist.Paths.RemoveAt(index);
                 }
             }
             else
             {
-                selectedPlaylist.Paths.RemoveAt(index);
+                SelectedPlaylist.Paths.RemoveAt(index);
             }
         }
     }

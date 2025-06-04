@@ -50,7 +50,12 @@
                 <Button x:Name="btnAddFolder" Content="Přidej složku" Click="btnAddFolder_Click"/>
                 <Button x:Name="btnAddFile" Content="Přidej soubor" Click="btnAddFile_Click"/>
                 <Button x:Name="btnRemovePath" Content="Smaž" Click="btnRemovePath_Click"/>
-                <Button x:Name="btnDown" Content="Dolu"/>
+                <Button x:Name="btnDown" Content="Dolu" Margin="0,0,0,20"/>
+                <TextBlock Text="Položky"/>
+                <TextBlock Text="přidávat:"/>
+                <RadioButton x:Name="rbAddToEnd" Content="na konec" IsChecked="True"/>
+                <RadioButton Content="Před výběr"/>
+
             </StackPanel>
             <ListBox x:Name="lbFilenames" ItemsSource="{Binding SelectedPlaylist.Paths}"/>
         </DockPanel>
