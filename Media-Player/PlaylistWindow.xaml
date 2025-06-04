@@ -34,7 +34,7 @@
                     <TextBlock Text="Spusť playlist: "/>
                     <Button x:Name="btnFromBegin" Content="od začátku" Click="btnFromBegin_Click"/>
                     <TextBlock Text="/"/>
-                    <Button x:Name="btnFromSelect" Content="od výběru"/>
+                    <Button x:Name="btnFromSelect" Content="od výběru" Click="btnFromSelect_Click"/>
                 </WrapPanel>
             </StackPanel>
             <ListBox x:Name="lbPlaylists" DockPanel.Dock="Left" Width="250" ItemsSource="{Binding ActualPlaylists}" 

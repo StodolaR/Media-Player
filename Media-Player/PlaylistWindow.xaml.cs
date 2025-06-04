@@ -193,9 +193,17 @@ namespace Media_Player
 
         private void btnFromBegin_Click(object sender, RoutedEventArgs e)
         {
+            GetFinalPlaylist(0);
+        }
+        private void btnFromSelect_Click(object sender, RoutedEventArgs e)
+        {
+            GetFinalPlaylist(lbFilenames.SelectedIndex);
+        }
+        private void GetFinalPlaylist(int firstIndex)
+        {
             if (selectedPlaylist != null)
             {
-                for (int i = 0; i < selectedPlaylist.Paths.Count; i++) 
+                for (int i = firstIndex; i < selectedPlaylist.Paths.Count; i++)
                 {
                     if (!selectedPlaylist.Paths[i].EndsWith("]"))
                     {
@@ -253,5 +261,7 @@ namespace Media_Player
                 SelectedPlaylist.Paths.Add("[Konec složky]");
             }
         }
+
+        
     }
 }
