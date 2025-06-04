@@ -101,6 +101,7 @@ namespace Media_Player
 
         private void btnVideo_Click(object sender, RoutedEventArgs e)
         {
+            spSlideshow.Visibility = Visibility.Collapsed;
             imPicture.Source = null;
             if(mePlayer.Source != null && mePlayer.Source.AbsolutePath.EndsWith("mp3"))
             {
@@ -173,6 +174,14 @@ namespace Media_Player
                     {
                         playlistWindow.finalResult.Remove(playlistWindow.finalResult.Last());
                         picturesPlaylist = playlistWindow.finalResult;
+                        if(picturesPlaylist.Count > 1)
+                        {
+                            spSlideshow.Visibility = Visibility.Visible;
+                        }
+                        else
+                        {
+                            spSlideshow.Visibility = Visibility.Collapsed;
+                        }
                     }
                     else
                     {
@@ -202,7 +211,7 @@ namespace Media_Player
 
         private void btnNext_Click(object sender, RoutedEventArgs e)
         {
-            if ((playlistCounter) == mediaPlaylist.Count-1) return;
+            if ((playlistCounter) >= mediaPlaylist.Count-1) return;
             mePlayer.Source = new Uri(mediaPlaylist[++playlistCounter]);
             slProgress.Value = 0;
             tbFilename.Text = System.IO.Path.GetFileName(mediaPlaylist[playlistCounter]);

@@ -29,7 +29,7 @@
                 <RadioButton x:Name="btnVideo" Content="Video" DockPanel.Dock="Right" IsChecked="True" Click="btnVideo_Click"/>
                 <RadioButton x:Name="btnAudio" Content="Audio/Picture" DockPanel.Dock="Right" Click="btnAudio_Click"/>
                 <Slider x:Name="slVolume" Width="100" DockPanel.Dock="Left" Maximum="1" Value="0.7" ValueChanged="slVolume_ValueChanged"/>
-                <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal" x:Name="spSlideshow" Visibility="Collapsed">
                     <TextBlock x:Name="tbPicturesCount" Text="Počet obrázků: 0"/>
                     <TextBlock Text="Časová prodleva: "/>
                     <TextBox x:Name="tbxDelay" Text="0"/>

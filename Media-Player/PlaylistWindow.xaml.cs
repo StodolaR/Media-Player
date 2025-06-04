@@ -28,7 +28,17 @@ namespace Media_Player
     {
         private PlaylistCollectionsFile allPlaylists;
         private Playlist? selectedPlaylist;
-        public ObservableCollection<Playlist> ActualPlaylists { get; set; }
+        private ObservableCollection<Playlist> actualPlaylists;
+
+        public ObservableCollection<Playlist> ActualPlaylists 
+        {
+            get => actualPlaylists;
+            set
+            {
+                actualPlaylists = value;
+                OnPropertyChanged(nameof(ActualPlaylists));
+            }
+        }
         public Playlist? SelectedPlaylist
         {
             get => selectedPlaylist;
@@ -102,11 +112,11 @@ namespace Media_Player
         {
             if(btnPictures.IsChecked == true)
             {
-                GetPicturePlaylists();
+                ActualPlaylists = GetPicturePlaylists();
             }
             else
             {
-                GetAudioPlaylists();
+                 ActualPlaylists = GetAudioPlaylists();
             }
         }
 
