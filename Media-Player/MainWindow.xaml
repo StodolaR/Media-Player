@@ -13,7 +13,13 @@
         </Grid.RowDefinitions>
         <MediaElement Name="mePlayer" LoadedBehavior="Manual" MediaEnded="mePlayer_MediaEnded"/>
         <DockPanel x:Name="dPPictures">
-            <ListBox x:Name="lbPreviews" DockPanel.Dock="Right" Visibility="Collapsed"/>
+            <ListBox x:Name="lbPreviews" DockPanel.Dock="Right" Visibility="Collapsed" SelectionChanged="lbPreviews_SelectionChanged">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Image Source="{Binding}" Width="60" Margin="2" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
             <Image x:Name="imPicture"/>
         </DockPanel>
         <DockPanel x:Name="dpControlPanel" Height="60" Grid.Row="1">

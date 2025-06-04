@@ -72,6 +72,9 @@ namespace Media_Player
                     }
                     else
                     {
+                        picturesPlaylist.Clear();
+                        lbPreviews.ItemsSource = picturesPlaylist;
+                        lbPreviews.Items.Refresh();
                         imPicture.Source = new BitmapImage(new Uri(ofd.FileName)); 
                     }
                 }
@@ -183,11 +186,16 @@ namespace Media_Player
                         if(picturesPlaylist.Count > 1)
                         {
                             spSlideshow.Visibility = Visibility.Visible;
+                            lbPreviews.ItemsSource = picturesPlaylist;
+                            lbPreviews.SelectedIndex = 0;
+                            lbPreviews.Visibility = Visibility.Visible;
                         }
                         else
                         {
                             spSlideshow.Visibility = Visibility.Collapsed;
+                            lbPreviews.Visibility = Visibility.Collapsed;
                         }
+                        imPicture.Source = new BitmapImage(new Uri(picturesPlaylist[0]));
                     }
                     else
                     {
@@ -221,6 +229,14 @@ namespace Media_Player
             mePlayer.Source = new Uri(mediaPlaylist[++playlistCounter]);
             slProgress.Value = 0;
             tbFilename.Text = System.IO.Path.GetFileName(mediaPlaylist[playlistCounter]);
+        }
+
+        private void lbPreviews_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (lbPreviews.SelectedItem != null)
+            {
+                imPicture.Source = new BitmapImage(new Uri((string)lbPreviews.SelectedItem));
+            }
         }
     }
 }
