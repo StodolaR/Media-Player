@@ -198,6 +198,7 @@ namespace Media_Player
             if (btnVideo.IsChecked != null)
             {
                 PlaylistWindow playlistWindow = new PlaylistWindow((bool)btnVideo.IsChecked);
+                playlistWindow.Closing += PlaylistWindow_Closing;
                 if (playlistWindow.ShowDialog() == true)
                 {
                     if(playlistWindow.FinalResult.Last() == "(obrázky)")
@@ -227,6 +228,14 @@ namespace Media_Player
                     }
                 }
             }  
+        }
+
+        private void PlaylistWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (sender != null)
+            {
+                ((PlaylistWindow)sender).SerializePlaylists();
+            }
         }
 
         private void mePlayer_MediaEnded(object sender, RoutedEventArgs e)

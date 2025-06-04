@@ -222,10 +222,9 @@ namespace Media_Player
                 FinalResult.Add(tbPlaylistType.Text);
                 this.DialogResult = true;
             }
-            SerializePlaylists();
             this.Close();
         }
-        private void SerializePlaylists()
+        public void SerializePlaylists()
         {
             try
             {
