@@ -47,7 +47,7 @@
                 </ListBox.ItemTemplate>
             </ListBox>
             <StackPanel VerticalAlignment="Center" DockPanel.Dock="Right">
-                <Button x:Name="btnUp" Content="Nahoru"/>
+                <Button x:Name="btnUp" Content="Nahoru" Click="btnUp_Click"/>
                 <Button x:Name="btnAddFolder" Content="Přidej složku" Click="BtnAddFolder_Click"/>
                 <Button x:Name="btnAddFile" Content="Přidej soubor" Click="BtnAddFile_Click"/>
                 <Button x:Name="btnRemovePath" Content="Smaž" Click="BtnRemovePath_Click"/>

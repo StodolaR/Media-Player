@@ -274,7 +274,7 @@ namespace Media_Player
                 {
                     insertIndex = lbFilenames.SelectedIndex;
                 }
-                SelectedPlaylist.Paths.Insert(insertIndex++, "[SLOŽkA] " + ofold.FolderName);
+                SelectedPlaylist.Paths.Insert(insertIndex++, "[SLOŽKA] " + ofold.FolderName);
                 foreach (string file in filesInFolder)
                 {
                     foreach(string extension in searchedExtensions)
@@ -296,12 +296,17 @@ namespace Media_Player
             int index = lbFilenames.SelectedIndex;
             if (((string)lbFilenames.SelectedItem).StartsWith("["))
             {
-                bool folderRemoved = false;
-                while (!folderRemoved)
+                int folderRemoved = 1;
+                SelectedPlaylist.Paths.RemoveAt(index);
+                while (folderRemoved > 0)
                 {
-                    if (SelectedPlaylist.Paths[index].EndsWith("]"))
+                    if (SelectedPlaylist.Paths[index].StartsWith("[SLOŽKA"))
                     {
-                        folderRemoved = true;
+                        folderRemoved++;
+                    }
+                    else if (SelectedPlaylist.Paths[index].StartsWith("[KONEC"))
+                    {
+                        folderRemoved--;
                     }
                     SelectedPlaylist.Paths.RemoveAt(index);
                 }
@@ -310,6 +315,11 @@ namespace Media_Player
             {
                 SelectedPlaylist.Paths.RemoveAt(index);
             }
+        }
+
+        private void btnUp_Click(object sender, RoutedEventArgs e)
+        {
+            //if(lbFilenames.SelectedIndex == 0 || ) return;
         }
     }
 }
