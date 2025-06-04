@@ -29,7 +29,7 @@
             <Slider x:Name="slProgress" DockPanel.Dock="Top" IsMoveToPointEnabled="True" Thumb.DragStarted="slProgress_DragStarted" 
                     Thumb.DragCompleted="slProgress_DragCompleted" ValueChanged="slProgress_ValueChanged" IsEnabled="False"/>
             <DockPanel x:Name="Controls" DockPanel.Dock="Bottom">
-                <Button x:Name="btnFulscreen" Content="Fullscreen" DockPanel.Dock="Right"/>
+                <Button x:Name="btnHide" Content="Skryj panel" DockPanel.Dock="Right" Click="btnHide_Click"/>
                 <Button x:Name="btnPlaylist" Content="Playlist" DockPanel.Dock="Right" Click="btnPlaylist_Click"/>
                 <Button x:Name="btnOpen" Content="Open" DockPanel.Dock="Right" Click="btnOpen_Click"/>
                 <RadioButton x:Name="btnVideo" Content="Video" DockPanel.Dock="Right"  Click="btnVideo_Click"/>
@@ -45,5 +45,7 @@
             <TextBlock x:Name="tbProgressTime" Text="0:00:00/0:00:00" DockPanel.Dock="Right"/>
             <TextBlock x:Name="tbFilename" Text="Název souboru" HorizontalAlignment="Center"/>
         </DockPanel>
+        <Button x:Name="btnShowPanel" Content="Obnov panel" HorizontalAlignment="Right" VerticalAlignment="Bottom" 
+                Click="btnShowPanel_Click" Visibility="Collapsed"/>
     </Grid>
 </Window>

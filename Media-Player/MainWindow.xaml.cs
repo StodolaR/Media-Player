@@ -284,5 +284,17 @@ namespace Media_Player
                 slideshow = 0;
             }
         }
+
+        private void btnHide_Click(object sender, RoutedEventArgs e)
+        {
+            dpControlPanel.Visibility = Visibility.Collapsed;
+            btnShowPanel.Visibility = Visibility.Visible;
+        }
+
+        private void btnShowPanel_Click(object sender, RoutedEventArgs e)
+        {
+            dpControlPanel.Visibility=Visibility.Visible;
+            btnShowPanel.Visibility=Visibility.Collapsed;
+        }
     }
 }
