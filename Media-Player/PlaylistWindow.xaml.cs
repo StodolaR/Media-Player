@@ -117,7 +117,7 @@ namespace Media_Player
             return allPlaylists.picturePlaylists;
         }
 
-        private void btnPictures_Click(object sender, RoutedEventArgs e)
+        private void BtnPictures_Click(object sender, RoutedEventArgs e)
         {
             if(btnPictures.IsChecked == true)
             {
@@ -129,13 +129,13 @@ namespace Media_Player
             }
         }
 
-        private void btnNew_Click(object sender, RoutedEventArgs e)
+        private void BtnNew_Click(object sender, RoutedEventArgs e)
         {
             popNewName.IsOpen = true;
             popNewName.Tag = "New";
         }
 
-        private void btnOk_Click(object sender, RoutedEventArgs e)
+        private void BtnOk_Click(object sender, RoutedEventArgs e)
         {
             if(!string.IsNullOrWhiteSpace(tbNewName.Text))
             {
@@ -154,13 +154,13 @@ namespace Media_Player
             popNewName.IsOpen = false;
         }
 
-        private void btnCancel_Click(object sender, RoutedEventArgs e)
+        private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
             tbNewName.Text = string.Empty;
             popNewName.IsOpen = false;
         }
 
-        private void btnRename_Click(object sender, RoutedEventArgs e)
+        private void BtnRename_Click(object sender, RoutedEventArgs e)
         {
             if(SelectedPlaylist != null)
             {
@@ -169,7 +169,7 @@ namespace Media_Player
             }
         }
 
-        private void btnRemove_Click(object sender, RoutedEventArgs e)
+        private void BtnRemove_Click(object sender, RoutedEventArgs e)
         {
             if (SelectedPlaylist != null)
             {
@@ -177,7 +177,7 @@ namespace Media_Player
             }
         }
 
-        private void btnAddFile_Click(object sender, RoutedEventArgs e)
+        private void BtnAddFile_Click(object sender, RoutedEventArgs e)
         {
             if (SelectedPlaylist == null) return;   
             OpenFileDialog ofd = new OpenFileDialog();
@@ -200,14 +200,18 @@ namespace Media_Player
             }
         }
 
-        private void btnFromBegin_Click(object sender, RoutedEventArgs e)
+        private void ChooseStartIndex(object sender, RoutedEventArgs e)
         {
-            GetFinalPlaylist(0);
+            if (((Button)sender).Name == "btnFromBegin" || lbFilenames.SelectedItem == null)
+            {
+                GetFinalPlaylist(0);
+            }
+            else
+            {
+                GetFinalPlaylist(lbFilenames.SelectedIndex);
+            }
         }
-        private void btnFromSelect_Click(object sender, RoutedEventArgs e)
-        {
-            GetFinalPlaylist(lbFilenames.SelectedIndex);
-        }
+
         private void GetFinalPlaylist(int firstIndex)
         {
             if (selectedPlaylist != null)
@@ -240,7 +244,7 @@ namespace Media_Player
             }
         }
 
-        private void btnAddFolder_Click(object sender, RoutedEventArgs e)
+        private void BtnAddFolder_Click(object sender, RoutedEventArgs e)
         {
             if (SelectedPlaylist == null) return;
             OpenFolderDialog ofold = new OpenFolderDialog();
@@ -279,7 +283,7 @@ namespace Media_Player
             }
         }
 
-        private void btnRemovePath_Click(object sender, RoutedEventArgs e)
+        private void BtnRemovePath_Click(object sender, RoutedEventArgs e)
         {
             if (lbFilenames.SelectedItem == null || SelectedPlaylist == null ||((string)lbFilenames.SelectedItem).StartsWith("[")) return;
             int index = lbFilenames.SelectedIndex;

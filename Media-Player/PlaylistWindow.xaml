@@ -14,27 +14,27 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
                 <StackPanel Orientation="Horizontal" Width="250">
-                    <Button x:Name="btnNew" Content="Nový" Click="btnNew_Click"/>
-                    <Button x:Name="btnRename" Content="Prejmenuj" Click="btnRename_Click"/>
+                    <Button x:Name="btnNew" Content="Nový" Click="BtnNew_Click"/>
+                    <Button x:Name="btnRename" Content="Prejmenuj" Click="BtnRename_Click"/>
                     <Popup x:Name="popNewName" Placement="Bottom" PlacementTarget="{Binding ElementName=btnNew}">
                         <StackPanel>
                             <TextBlock Text="Zadej název playlistu:" Background="White"/>
                             <TextBox x:Name="tbNewName" Width="250"/>
                             <StackPanel Orientation="Horizontal">
-                                <Button x:Name="btnOk" Content="Potvrď" Click="btnOk_Click" Width="125"/>
-                                <Button x:Name="btnCancel" Content="Zruš" Click="btnCancel_Click" Width="125"/>
+                                <Button x:Name="btnOk" Content="Potvrď" Click="BtnOk_Click" Width="125"/>
+                                <Button x:Name="btnCancel" Content="Zruš" Click="BtnCancel_Click" Width="125"/>
                             </StackPanel>
 
                         </StackPanel>
                     </Popup>
-                    <Button x:Name="btnRemove" Content="Smaž" Click="btnRemove_Click"/>
-                    <ToggleButton x:Name="btnPictures" Content="Audio/obrázky" Click="btnPictures_Click"/>
+                    <Button x:Name="btnRemove" Content="Smaž" Click="BtnRemove_Click"/>
+                    <ToggleButton x:Name="btnPictures" Content="Audio/obrázky" Click="BtnPictures_Click"/>
                 </StackPanel>
                 <WrapPanel>
                     <TextBlock Text="Spusť playlist: "/>
-                    <Button x:Name="btnFromBegin" Content="od začátku" Click="btnFromBegin_Click"/>
+                    <Button x:Name="btnFromBegin" Content="od začátku" Click="ChooseStartIndex"/>
                     <TextBlock Text="/"/>
-                    <Button x:Name="btnFromSelect" Content="od výběru" Click="btnFromSelect_Click"/>
+                    <Button x:Name="btnFromSelect" Content="od výběru" Click="ChooseStartIndex"/>
                 </WrapPanel>
             </StackPanel>
             <ListBox x:Name="lbPlaylists" DockPanel.Dock="Left" Width="250" ItemsSource="{Binding ActualPlaylists}" 
@@ -47,9 +47,9 @@
             </ListBox>
             <StackPanel VerticalAlignment="Center" DockPanel.Dock="Right">
                 <Button x:Name="btnUp" Content="Nahoru"/>
-                <Button x:Name="btnAddFolder" Content="Přidej složku" Click="btnAddFolder_Click"/>
-                <Button x:Name="btnAddFile" Content="Přidej soubor" Click="btnAddFile_Click"/>
-                <Button x:Name="btnRemovePath" Content="Smaž" Click="btnRemovePath_Click"/>
+                <Button x:Name="btnAddFolder" Content="Přidej složku" Click="BtnAddFolder_Click"/>
+                <Button x:Name="btnAddFile" Content="Přidej soubor" Click="BtnAddFile_Click"/>
+                <Button x:Name="btnRemovePath" Content="Smaž" Click="BtnRemovePath_Click"/>
                 <Button x:Name="btnDown" Content="Dolu" Margin="0,0,0,20"/>
                 <TextBlock Text="Položky"/>
                 <TextBlock Text="přidávat:"/>

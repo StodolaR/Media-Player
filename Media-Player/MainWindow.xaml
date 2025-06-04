@@ -11,9 +11,9 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <MediaElement Name="mePlayer" LoadedBehavior="Manual" MediaEnded="mePlayer_MediaEnded"/>
+        <MediaElement Name="mePlayer" LoadedBehavior="Manual" MediaEnded="MePlayer_MediaEnded"/>
         <DockPanel x:Name="dPPictures">
-            <ListBox x:Name="lbPreviews" DockPanel.Dock="Right" Visibility="Collapsed" SelectionChanged="lbPreviews_SelectionChanged">
+            <ListBox x:Name="lbPreviews" DockPanel.Dock="Right" Visibility="Collapsed" SelectionChanged="LbPreviews_SelectionChanged">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Image Source="{Binding}" Width="60" Margin="2" />
@@ -23,29 +23,29 @@
             <Image x:Name="imPicture"/>
         </DockPanel>
         <DockPanel x:Name="dpControlPanel" Height="60" Grid.Row="1">
-            <Button x:Name="btnLast" Content="Last" DockPanel.Dock="Left" Click="btnLast_Click"/>
-            <ToggleButton x:Name="btnPause" Content="Pause" DockPanel.Dock="Left" Width="35" IsEnabled="False" Checked="btnPause_Checked" Unchecked="btnPause_Unchecked"/>
-            <Button x:Name="btnNext" Content="Next" DockPanel.Dock="Left" Click="btnNext_Click"/>
-            <Slider x:Name="slProgress" DockPanel.Dock="Top" IsMoveToPointEnabled="True" Thumb.DragStarted="slProgress_DragStarted" 
-                    Thumb.DragCompleted="slProgress_DragCompleted" ValueChanged="slProgress_ValueChanged" IsEnabled="False"/>
+            <Button x:Name="btnLast" Content="Last" DockPanel.Dock="Left" Click="BtnLast_Click"/>
+            <ToggleButton x:Name="btnPause" Content="Pause" DockPanel.Dock="Left" Width="35" IsEnabled="False" Checked="BtnPause_Checked" Unchecked="BtnPause_Unchecked"/>
+            <Button x:Name="btnNext" Content="Next" DockPanel.Dock="Left" Click="BtnNext_Click"/>
+            <Slider x:Name="slProgress" DockPanel.Dock="Top" IsMoveToPointEnabled="True" Thumb.DragStarted="SlProgress_DragStarted" 
+                    Thumb.DragCompleted="SlProgress_DragCompleted" ValueChanged="slProgress_ValueChanged" IsEnabled="False"/>
             <DockPanel x:Name="Controls" DockPanel.Dock="Bottom">
-                <Button x:Name="btnHide" Content="Skryj panel" DockPanel.Dock="Right" Click="btnHide_Click"/>
-                <Button x:Name="btnPlaylist" Content="Playlist" DockPanel.Dock="Right" Click="btnPlaylist_Click"/>
-                <Button x:Name="btnOpen" Content="Open" DockPanel.Dock="Right" Click="btnOpen_Click"/>
-                <RadioButton x:Name="btnVideo" Content="Video" DockPanel.Dock="Right"  Click="btnVideo_Click"/>
-                <RadioButton x:Name="btnAudio" Content="Audio/Picture" DockPanel.Dock="Right" IsChecked="True" Click="btnAudio_Click"/>
-                <Slider x:Name="slVolume" Width="100" DockPanel.Dock="Left" Maximum="1" Value="0.7" ValueChanged="slVolume_ValueChanged"/>
+                <Button x:Name="btnHide" Content="Skryj panel" DockPanel.Dock="Right" Click="BtnHide_Click"/>
+                <Button x:Name="btnPlaylist" Content="Playlist" DockPanel.Dock="Right" Click="BtnPlaylist_Click"/>
+                <Button x:Name="btnOpen" Content="Open" DockPanel.Dock="Right" Click="BtnOpen_Click"/>
+                <RadioButton x:Name="btnVideo" Content="Video" DockPanel.Dock="Right"  Click="BtnVideo_Click"/>
+                <RadioButton x:Name="btnAudio" Content="Audio/Picture" DockPanel.Dock="Right" IsChecked="True" Click="BtnAudio_Click"/>
+                <Slider x:Name="slVolume" Width="100" DockPanel.Dock="Left" Maximum="1" Value="0.7" ValueChanged="SlVolume_ValueChanged"/>
                 <StackPanel Orientation="Horizontal" x:Name="spSlideshow" Visibility="Collapsed">
                     <TextBlock x:Name="tbPicturesCount" />
                     <TextBlock Text="Časová prodleva(s): "/>
-                    <TextBox x:Name="tbxDelay" Text="5" PreviewTextInput="tbxDelay_PreviewTextInput"/>
-                    <ToggleButton x:Name="btnSlideshow" Content="Slideshow" Click="btnSlideshow_Click"/>
+                    <TextBox x:Name="tbxDelay" Text="5" PreviewTextInput="TbxDelay_PreviewTextInput"/>
+                    <ToggleButton x:Name="btnSlideshow" Content="Slideshow" Click="BtnSlideshow_Click"/>
                 </StackPanel>
             </DockPanel>
             <TextBlock x:Name="tbProgressTime" Text="0:00:00/0:00:00" DockPanel.Dock="Right"/>
             <TextBlock x:Name="tbFilename" Text="Název souboru" HorizontalAlignment="Center"/>
         </DockPanel>
         <Button x:Name="btnShowPanel" Content="Obnov panel" HorizontalAlignment="Right" VerticalAlignment="Bottom" 
-                Click="btnShowPanel_Click" Visibility="Collapsed"/>
+                Click="BtnShowPanel_Click" Visibility="Collapsed"/>
     </Grid>
 </Window>

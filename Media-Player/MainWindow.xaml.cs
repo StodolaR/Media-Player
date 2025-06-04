@@ -69,7 +69,7 @@ namespace Media_Player
             }
         }
 
-        private void btnOpen_Click(object sender, RoutedEventArgs e)
+        private void BtnOpen_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
             if (btnVideo.IsChecked == true )
@@ -124,7 +124,7 @@ namespace Media_Player
             mePlayer.Play();
         }
 
-        private void btnVideo_Click(object sender, RoutedEventArgs e)
+        private void BtnVideo_Click(object sender, RoutedEventArgs e)
         {
             spSlideshow.Visibility = Visibility.Collapsed;
             imPicture.Source = null;
@@ -135,7 +135,7 @@ namespace Media_Player
            
         }
 
-        private void btnAudio_Click(object sender, RoutedEventArgs e)
+        private void BtnAudio_Click(object sender, RoutedEventArgs e)
         {
             if (mePlayer.Source != null && mePlayer.Source.AbsolutePath.EndsWith("mov"))
             {
@@ -156,29 +156,29 @@ namespace Media_Player
             tbFilename.Text = "Nazev souboru";
         }
 
-        private void btnPause_Checked(object sender, RoutedEventArgs e)
+        private void BtnPause_Checked(object sender, RoutedEventArgs e)
         {
             btnPause.Content = "Play";
             mePlayer.Pause();
         }
 
-        private void btnPause_Unchecked(object sender, RoutedEventArgs e)
+        private void BtnPause_Unchecked(object sender, RoutedEventArgs e)
         {
             btnPause.Content = "Pause";
             mePlayer.Play();
         }
 
-        private void slVolume_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        private void SlVolume_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             mePlayer.Volume = slVolume.Value;
         }
 
-        private void slProgress_DragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e)
+        private void SlProgress_DragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e)
         {
             positionAdjustment = true;
         }
 
-        private void slProgress_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
+        private void SlProgress_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
         {
             mePlayer.Position = TimeSpan.FromSeconds(slProgress.Value);
             positionAdjustment = false;
@@ -193,7 +193,7 @@ namespace Media_Player
             tbProgressTime.Text = TimeSpan.FromSeconds(slProgress.Value).ToString(@"h\:mm\:ss") + "/" + TimeSpan.FromSeconds(slProgress.Maximum).ToString(@"h\:mm\:ss");
         }
 
-        private void btnPlaylist_Click(object sender, RoutedEventArgs e)
+        private void BtnPlaylist_Click(object sender, RoutedEventArgs e)
         {
             if (btnVideo.IsChecked != null)
             {
@@ -238,7 +238,7 @@ namespace Media_Player
             }
         }
 
-        private void mePlayer_MediaEnded(object sender, RoutedEventArgs e)
+        private void MePlayer_MediaEnded(object sender, RoutedEventArgs e)
         {
             if ((playlistCounter) == mediaPlaylist.Count -1) return;
             mePlayer.Source = new Uri(mediaPlaylist[++playlistCounter]);
@@ -246,7 +246,7 @@ namespace Media_Player
             tbFilename.Text = System.IO.Path.GetFileName(mediaPlaylist[playlistCounter]);
         }
 
-        private void btnLast_Click(object sender, RoutedEventArgs e)
+        private void BtnLast_Click(object sender, RoutedEventArgs e)
         {
             if(playlistCounter == 0) return;
             mePlayer.Source = new Uri(mediaPlaylist[--playlistCounter]);
@@ -254,7 +254,7 @@ namespace Media_Player
             tbFilename.Text = System.IO.Path.GetFileName(mediaPlaylist[playlistCounter]);
         }
 
-        private void btnNext_Click(object sender, RoutedEventArgs e)
+        private void BtnNext_Click(object sender, RoutedEventArgs e)
         {
             if (playlistCounter >= mediaPlaylist.Count-1) return;
             mePlayer.Source = new Uri(mediaPlaylist[++playlistCounter]);
@@ -262,7 +262,7 @@ namespace Media_Player
             tbFilename.Text = System.IO.Path.GetFileName(mediaPlaylist[playlistCounter]);
         }
 
-        private void lbPreviews_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void LbPreviews_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (lbPreviews.SelectedItem != null)
             {
@@ -270,14 +270,14 @@ namespace Media_Player
             }
         }
 
-        private void tbxDelay_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        private void TbxDelay_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             if (tbxDelay.Text != "") return;
             Regex delay = new Regex("[^1-9]");
             e.Handled = delay.IsMatch(e.Text);
         }
 
-        private void btnSlideshow_Click(object sender, RoutedEventArgs e)
+        private void BtnSlideshow_Click(object sender, RoutedEventArgs e)
         {
             
             if (btnSlideshow.IsChecked !=null && btnSlideshow.IsChecked == true)
@@ -294,13 +294,13 @@ namespace Media_Player
             }
         }
 
-        private void btnHide_Click(object sender, RoutedEventArgs e)
+        private void BtnHide_Click(object sender, RoutedEventArgs e)
         {
             dpControlPanel.Visibility = Visibility.Collapsed;
             btnShowPanel.Visibility = Visibility.Visible;
         }
 
-        private void btnShowPanel_Click(object sender, RoutedEventArgs e)
+        private void BtnShowPanel_Click(object sender, RoutedEventArgs e)
         {
             dpControlPanel.Visibility=Visibility.Visible;
             btnShowPanel.Visibility=Visibility.Collapsed;
