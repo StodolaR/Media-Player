@@ -49,7 +49,7 @@
                 <Button x:Name="btnUp" Content="Nahoru"/>
                 <Button x:Name="btnAddFolder" Content="Přidej složku" Click="btnAddFolder_Click"/>
                 <Button x:Name="btnAddFile" Content="Přidej soubor" Click="btnAddFile_Click"/>
-                <Button x:Name="btnRemovePath" Content="Smaž"/>
+                <Button x:Name="btnRemovePath" Content="Smaž" Click="btnRemovePath_Click"/>
                 <Button x:Name="btnDown" Content="Dolu"/>
             </StackPanel>
             <ListBox x:Name="lbFilenames" ItemsSource="{Binding SelectedPlaylist.Paths}"/>

@@ -3,9 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics.Eventing.Reader;
 using System.Diagnostics.Metrics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -262,6 +264,26 @@ namespace Media_Player
             }
         }
 
-        
+        private void btnRemovePath_Click(object sender, RoutedEventArgs e)
+        {
+            if (lbFilenames.SelectedItem == null || selectedPlaylist == null || ((string)lbFilenames.SelectedItem).StartsWith("[")) return;
+            int index = lbFilenames.SelectedIndex;
+            if (((string)lbFilenames.SelectedItem).EndsWith("]"))
+            {
+                bool folderRemoved = false;
+                while (!folderRemoved)
+                {
+                    if (selectedPlaylist.Paths[index].StartsWith("["))
+                    {
+                        folderRemoved = true;
+                    }
+                    selectedPlaylist.Paths.RemoveAt(index);
+                }
+            }
+            else
+            {
+                selectedPlaylist.Paths.RemoveAt(index);
+            }
+        }
     }
 }
