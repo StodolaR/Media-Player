@@ -218,7 +218,7 @@ namespace Media_Player
             {
                 for (int i = firstIndex; i < selectedPlaylist.Paths.Count; i++)
                 {
-                    if (!selectedPlaylist.Paths[i].EndsWith("]"))
+                    if (!selectedPlaylist.Paths[i].StartsWith("["))
                     {
                         FinalResult.Add(selectedPlaylist.Paths[i]);
                     }
@@ -267,7 +267,7 @@ namespace Media_Player
                 {
                     insertIndex = lbFilenames.SelectedIndex;
                 }
-                SelectedPlaylist.Paths.Insert(insertIndex++, ofold.FolderName + "[složka]");
+                SelectedPlaylist.Paths.Insert(insertIndex++, "[SLOŽkA] " + ofold.FolderName);
                 foreach (string file in filesInFolder)
                 {
                     foreach(string extension in searchedExtensions)
@@ -279,20 +279,20 @@ namespace Media_Player
                         }
                     }
                 }
-                SelectedPlaylist.Paths.Insert(insertIndex, "[Konec složky]");
+                SelectedPlaylist.Paths.Insert(insertIndex, "[KONEC SLOŽKY]");
             }
         }
 
         private void BtnRemovePath_Click(object sender, RoutedEventArgs e)
         {
-            if (lbFilenames.SelectedItem == null || SelectedPlaylist == null ||((string)lbFilenames.SelectedItem).StartsWith("[")) return;
+            if (lbFilenames.SelectedItem == null || SelectedPlaylist == null ||((string)lbFilenames.SelectedItem).EndsWith("]")) return;
             int index = lbFilenames.SelectedIndex;
-            if (((string)lbFilenames.SelectedItem).EndsWith("]"))
+            if (((string)lbFilenames.SelectedItem).StartsWith("["))
             {
                 bool folderRemoved = false;
                 while (!folderRemoved)
                 {
-                    if (SelectedPlaylist.Paths[index].StartsWith("["))
+                    if (SelectedPlaylist.Paths[index].EndsWith("]"))
                     {
                         folderRemoved = true;
                     }
