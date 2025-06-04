@@ -272,7 +272,11 @@ namespace Media_Player
 
         private void TbxDelay_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            if (tbxDelay.Text != "") return;
+            if (tbxDelay.Text != "")
+            {
+                e.Handled = true;
+                return;
+            }
             Regex delay = new Regex("[^1-9]");
             e.Handled = delay.IsMatch(e.Text);
         }
