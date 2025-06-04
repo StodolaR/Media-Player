@@ -139,6 +139,12 @@ namespace Media_Player
         {
             if(!string.IsNullOrWhiteSpace(tbNewName.Text))
             {
+                if(actualPlaylists.Any(x => x.Name == tbNewName.Text))
+                {
+                    tbNameExist.Visibility = Visibility.Visible;
+                    return;
+                }
+                tbNameExist.Visibility = Visibility.Collapsed;
                 if((string)popNewName.Tag == "New")
                 {
                     Playlist newPlaylist = new Playlist(tbNewName.Text);
@@ -156,6 +162,7 @@ namespace Media_Player
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
+            tbNameExist.Visibility = Visibility.Collapsed;
             tbNewName.Text = string.Empty;
             popNewName.IsOpen = false;
         }
