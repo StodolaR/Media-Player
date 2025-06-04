@@ -21,7 +21,7 @@
             <ToggleButton x:Name="btnPause" Content="Pause" DockPanel.Dock="Left" Width="35" IsEnabled="False" Checked="btnPause_Checked" Unchecked="btnPause_Unchecked"/>
             <Button x:Name="btnNext" Content="Next" DockPanel.Dock="Left" Click="btnNext_Click"/>
             <Slider x:Name="slProgress" DockPanel.Dock="Top" IsMoveToPointEnabled="True" Thumb.DragStarted="slProgress_DragStarted" 
-                    Thumb.DragCompleted="slProgress_DragCompleted" ValueChanged="slProgress_ValueChanged"/>
+                    Thumb.DragCompleted="slProgress_DragCompleted" ValueChanged="slProgress_ValueChanged" IsEnabled="False"/>
             <DockPanel x:Name="Controls" DockPanel.Dock="Bottom">
                 <Button x:Name="btnFulscreen" Content="Fullscreen" DockPanel.Dock="Right"/>
                 <Button x:Name="btnPlaylist" Content="Playlist" DockPanel.Dock="Right" Click="btnPlaylist_Click"/>

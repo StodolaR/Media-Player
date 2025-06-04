@@ -48,12 +48,13 @@ namespace Media_Player
                 OnPropertyChanged(nameof(SelectedPlaylist));
             }
         }
-        public List<string> finalResult { get; set; }
+        public List<string> FinalResult { get; set; }
         public PlaylistWindow(bool IsVideoPlaylist)
         {
             InitializeComponent();
             allPlaylists = DeserializePlaylists();
-            finalResult = new List<string>();
+            actualPlaylists = new ObservableCollection<Playlist>();
+            FinalResult = new List<string>();
             if (IsVideoPlaylist)
             {
                 ActualPlaylists = GetVideoPlaylists();
@@ -81,7 +82,13 @@ namespace Media_Player
                     XmlSerializer serializer = new XmlSerializer(typeof(PlaylistCollectionsFile));
                     using(StreamReader sr = new StreamReader("playlists.xml"))
                     {
-                        return (PlaylistCollectionsFile)serializer.Deserialize(sr);
+                        PlaylistCollectionsFile collections = new PlaylistCollectionsFile();
+                        object? collectionsObject = serializer.Deserialize(sr);
+                        if (collectionsObject != null)
+                        {
+                            collections = (PlaylistCollectionsFile)collectionsObject;
+                        }
+                        return collections;
                     }
                 }
             }
@@ -190,10 +197,10 @@ namespace Media_Player
                 {
                     if (!selectedPlaylist.Paths[i].EndsWith("]"))
                     {
-                        finalResult.Add(selectedPlaylist.Paths[i]);
+                        FinalResult.Add(selectedPlaylist.Paths[i]);
                     }
                 }
-                finalResult.Add(tbPlaylistType.Text);
+                FinalResult.Add(tbPlaylistType.Text);
                 this.DialogResult = true;
                 SerializePlaylists();
             }

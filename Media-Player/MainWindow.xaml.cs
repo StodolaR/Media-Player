@@ -95,6 +95,7 @@ namespace Media_Player
             tbFilename.Text = System.IO.Path.GetFileName(fileName);
             mePlayer.Source = new Uri(mediaPlaylist[0]);
             playlistCounter = 0;
+            slProgress.IsEnabled = true;
             slProgress.Value = 0;
             mePlayer.Play();
         }
@@ -119,11 +120,16 @@ namespace Media_Player
         }
         private void MediaChangeReset()
         {
-            slProgress.Value = 0;
-            tbProgressTime.Text = "0:00:00/0:00:00";
             mePlayer.Source = null;
             btnPause.IsChecked = false;
             btnPause.IsEnabled = false;
+            slProgress.Value = 0;
+            slProgress.IsEnabled = false;
+            playlistCounter = 0;
+            mediaPlaylist.Clear();
+            picturesPlaylist.Clear();
+            tbProgressTime.Text = "0:00:00/0:00:00";
+            tbFilename.Text = "Nazev souboru";
         }
 
         private void btnPause_Checked(object sender, RoutedEventArgs e)
@@ -170,10 +176,10 @@ namespace Media_Player
                 PlaylistWindow playlistWindow = new PlaylistWindow((bool)btnVideo.IsChecked);
                 if (playlistWindow.ShowDialog() == true)
                 {
-                    if(playlistWindow.finalResult.Last() == "(obrázky)")
+                    if(playlistWindow.FinalResult.Last() == "(obrázky)")
                     {
-                        playlistWindow.finalResult.Remove(playlistWindow.finalResult.Last());
-                        picturesPlaylist = playlistWindow.finalResult;
+                        playlistWindow.FinalResult.Remove(playlistWindow.FinalResult.Last());
+                        picturesPlaylist = playlistWindow.FinalResult;
                         if(picturesPlaylist.Count > 1)
                         {
                             spSlideshow.Visibility = Visibility.Visible;
@@ -185,8 +191,8 @@ namespace Media_Player
                     }
                     else
                     {
-                        playlistWindow.finalResult.Remove(playlistWindow.finalResult.Last());
-                        mediaPlaylist = playlistWindow.finalResult;
+                        playlistWindow.FinalResult.Remove(playlistWindow.FinalResult.Last());
+                        mediaPlaylist = playlistWindow.FinalResult;
                         SetPanelAndPlay(mediaPlaylist[0]);
                     }
                 }
@@ -195,8 +201,8 @@ namespace Media_Player
 
         private void mePlayer_MediaEnded(object sender, RoutedEventArgs e)
         {
-            if ((++playlistCounter) == mediaPlaylist.Count) return;
-            mePlayer.Source = new Uri(mediaPlaylist[playlistCounter]);
+            if ((playlistCounter) == mediaPlaylist.Count -1) return;
+            mePlayer.Source = new Uri(mediaPlaylist[++playlistCounter]);
             slProgress.Value = 0;
             tbFilename.Text = System.IO.Path.GetFileName(mediaPlaylist[playlistCounter]);
         }
@@ -211,7 +217,7 @@ namespace Media_Player
 
         private void btnNext_Click(object sender, RoutedEventArgs e)
         {
-            if ((playlistCounter) >= mediaPlaylist.Count-1) return;
+            if (playlistCounter >= mediaPlaylist.Count-1) return;
             mePlayer.Source = new Uri(mediaPlaylist[++playlistCounter]);
             slProgress.Value = 0;
             tbFilename.Text = System.IO.Path.GetFileName(mediaPlaylist[playlistCounter]);
