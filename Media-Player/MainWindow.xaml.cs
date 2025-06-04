@@ -2,6 +2,7 @@
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -20,6 +21,8 @@ namespace Media_Player
     /// </summary>
     public partial class MainWindow : Window
     {
+        private int slideshow;
+        private int countdown;
         private bool positionAdjustment;
         private int playlistCounter;
         private List<string> mediaPlaylist;
@@ -45,6 +48,24 @@ namespace Media_Player
             {
                 slProgress.Maximum = mePlayer.NaturalDuration.TimeSpan.TotalSeconds;
                 slProgress.Value = mePlayer.Position.TotalSeconds;
+            }
+            if(slideshow > 0)
+            {
+                if(countdown == 0)
+                {
+                    countdown = slideshow;
+                    if(lbPreviews.SelectedIndex < lbPreviews.Items.Count - 1)
+                    {
+                        lbPreviews.SelectedIndex++;
+                    }
+                    else
+                    {
+                        countdown = slideshow = 0;
+                        btnSlideshow.IsChecked = false;
+                        return;
+                    }
+                }
+                countdown--;
             }
         }
 
@@ -189,6 +210,7 @@ namespace Media_Player
                             lbPreviews.ItemsSource = picturesPlaylist;
                             lbPreviews.SelectedIndex = 0;
                             lbPreviews.Visibility = Visibility.Visible;
+                            tbPicturesCount.Text = "Počet obrázků: " + picturesPlaylist.Count; 
                         }
                         else
                         {
@@ -236,6 +258,30 @@ namespace Media_Player
             if (lbPreviews.SelectedItem != null)
             {
                 imPicture.Source = new BitmapImage(new Uri((string)lbPreviews.SelectedItem));
+            }
+        }
+
+        private void tbxDelay_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            if (tbxDelay.Text != "") return;
+            Regex delay = new Regex("[^1-9]");
+            e.Handled = delay.IsMatch(e.Text);
+        }
+
+        private void btnSlideshow_Click(object sender, RoutedEventArgs e)
+        {
+            
+            if (btnSlideshow.IsChecked !=null && btnSlideshow.IsChecked == true)
+            {
+                if (!int.TryParse(tbxDelay.Text, out slideshow))
+                {
+                    btnSlideshow.IsEnabled = false;
+                    slideshow = 0;
+                }
+            }
+            else
+            {
+                slideshow = 0;
             }
         }
     }

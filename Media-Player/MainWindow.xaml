@@ -32,14 +32,14 @@
                 <Button x:Name="btnFulscreen" Content="Fullscreen" DockPanel.Dock="Right"/>
                 <Button x:Name="btnPlaylist" Content="Playlist" DockPanel.Dock="Right" Click="btnPlaylist_Click"/>
                 <Button x:Name="btnOpen" Content="Open" DockPanel.Dock="Right" Click="btnOpen_Click"/>
-                <RadioButton x:Name="btnVideo" Content="Video" DockPanel.Dock="Right" IsChecked="True" Click="btnVideo_Click"/>
-                <RadioButton x:Name="btnAudio" Content="Audio/Picture" DockPanel.Dock="Right" Click="btnAudio_Click"/>
+                <RadioButton x:Name="btnVideo" Content="Video" DockPanel.Dock="Right"  Click="btnVideo_Click"/>
+                <RadioButton x:Name="btnAudio" Content="Audio/Picture" DockPanel.Dock="Right" IsChecked="True" Click="btnAudio_Click"/>
                 <Slider x:Name="slVolume" Width="100" DockPanel.Dock="Left" Maximum="1" Value="0.7" ValueChanged="slVolume_ValueChanged"/>
                 <StackPanel Orientation="Horizontal" x:Name="spSlideshow" Visibility="Collapsed">
-                    <TextBlock x:Name="tbPicturesCount" Text="Počet obrázků: 0"/>
-                    <TextBlock Text="Časová prodleva: "/>
-                    <TextBox x:Name="tbxDelay" Text="0"/>
-                    <Button x:Name="btnSlideshow" Content="Slideshow" />
+                    <TextBlock x:Name="tbPicturesCount" />
+                    <TextBlock Text="Časová prodleva(s): "/>
+                    <TextBox x:Name="tbxDelay" Text="5" PreviewTextInput="tbxDelay_PreviewTextInput"/>
+                    <ToggleButton x:Name="btnSlideshow" Content="Slideshow" Click="btnSlideshow_Click"/>
                 </StackPanel>
             </DockPanel>
             <TextBlock x:Name="tbProgressTime" Text="0:00:00/0:00:00" DockPanel.Dock="Right"/>
