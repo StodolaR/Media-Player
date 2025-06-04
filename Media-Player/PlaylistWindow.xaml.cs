@@ -27,8 +27,8 @@ namespace Media_Player
     public partial class PlaylistWindow : Window, INotifyPropertyChanged
     {
         private PlaylistCollectionsFile allPlaylists;
-        private Playlist? selectedPlaylist;
         private ObservableCollection<Playlist> actualPlaylists;
+        private Playlist? selectedPlaylist;
 
         public ObservableCollection<Playlist> ActualPlaylists 
         {
@@ -54,7 +54,6 @@ namespace Media_Player
             InitializeComponent();
             allPlaylists = DeserializePlaylists();
             actualPlaylists = new ObservableCollection<Playlist>();
-            FinalResult = new List<string>();
             if (IsVideoPlaylist)
             {
                 ActualPlaylists = GetVideoPlaylists();
@@ -63,6 +62,7 @@ namespace Media_Player
             {
                 ActualPlaylists = GetAudioPlaylists();
             }
+            FinalResult = new List<string>();
             DataContext = this;
         }
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -139,7 +139,9 @@ namespace Media_Player
             {
                 if((string)popNewName.Tag == "New")
                 {
-                    ActualPlaylists.Add(new Playlist(tbNewName.Text));
+                    Playlist newPlaylist = new Playlist(tbNewName.Text);
+                    ActualPlaylists.Add(newPlaylist);
+                    SelectedPlaylist = newPlaylist;
                 }
                 else if ((string)popNewName.Tag == "Rename" && SelectedPlaylist != null)
                 {
@@ -202,8 +204,8 @@ namespace Media_Player
                 }
                 FinalResult.Add(tbPlaylistType.Text);
                 this.DialogResult = true;
-                SerializePlaylists();
             }
+            SerializePlaylists();
             this.Close();
         }
         private void SerializePlaylists()
