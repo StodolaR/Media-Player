@@ -6,11 +6,31 @@
         xmlns:local="clr-namespace:Media_Player"
         mc:Ignorable="d"
         Title="PlaylistWindow" Height="450" Width="800">
-    <Grid>
+    <Grid Margin="5">
+        <Grid.Resources>
+            <Style TargetType="ListBox">
+                <Setter Property="Margin" Value="2"/>
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                            <GradientStop Color="#666666" Offset="0"/>
+                            <GradientStop Color="Black" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Foreground" Value="White"/>
+            </Style>
+        </Grid.Resources>
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                <GradientStop Color="Gray" Offset="0"/>
+                <GradientStop Color="Black" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
         <DockPanel>
             <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-                <TextBlock Text="Playlist " FontSize="20"/>
-                <TextBlock x:Name="tbPlaylistType"/>
+                <TextBlock Text="PLAYLIST" FontSize="25" FontFamily="Wide Latin" Margin="20,5" Foreground="Gold"/>
+                <TextBlock x:Name="tbPlaylistType" Foreground="Gold" FontSize="15" VerticalAlignment="Center"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
                 <StackPanel Orientation="Horizontal" Width="250">
@@ -32,7 +52,9 @@
                     <ToggleButton x:Name="btnPictures" Content="Audio/obrázky" Click="BtnPictures_Click"/>
                 </StackPanel>
                 <WrapPanel>
-                    <TextBlock Text="Spusť playlist: "/>
+                    <Border CornerRadius="7,0,0,7" Height="20">
+                        <TextBlock Text="Spusť playlist: "/>
+                    </Border>
                     <Button x:Name="btnFromBegin" Content="od začátku" Click="ChooseStartIndex"/>
                     <TextBlock Text="/"/>
                     <Button x:Name="btnFromSelect" Content="od výběru" Click="ChooseStartIndex"/>
@@ -51,12 +73,15 @@
                 <Button x:Name="btnAddFolder" Content="Přidej složku" Click="BtnAddFolder_Click"/>
                 <Button x:Name="btnAddFile" Content="Přidej soubor" Click="BtnAddFile_Click"/>
                 <Button x:Name="btnRemovePath" Content="Smaž" Click="BtnRemovePath_Click"/>
-                <Button x:Name="btnDown" Content="Dolu" Margin="0,0,0,20" Click="BtnDown_Click"/>
-                <TextBlock Text="Položky"/>
-                <TextBlock Text="přidávat:"/>
-                <RadioButton x:Name="rbAddToEnd" Content="na konec" IsChecked="True"/>
-                <RadioButton Content="Před výběr"/>
-
+                <Button x:Name="btnDown" Content="Dolu"  Click="BtnDown_Click"/>
+                <Border Margin="5,20" CornerRadius="3">
+                    <StackPanel Margin="5">
+                        <TextBlock Text="Položky"/>
+                        <TextBlock Text="přidávat:"/>
+                        <RadioButton x:Name="rbAddToEnd" Content="na konec" IsChecked="True"/>
+                        <RadioButton Content="Před výběr"/>
+                    </StackPanel>
+                </Border>
             </StackPanel>
             <ListBox x:Name="lbFilenames" ItemsSource="{Binding SelectedPlaylist.Paths}"/>
         </DockPanel>

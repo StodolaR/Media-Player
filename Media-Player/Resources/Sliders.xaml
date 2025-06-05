@@ -1,0 +1,40 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Style TargetType="Slider">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Track x:Name="PART_Track">
+                        <Track.DecreaseRepeatButton>
+                            <RepeatButton Foreground="{TemplateBinding Foreground}">
+                                <RepeatButton.Template>
+                                    <ControlTemplate  TargetType="RepeatButton">
+                                        <Rectangle Fill="{TemplateBinding Foreground}" Height="5"/>
+                                    </ControlTemplate>
+                                </RepeatButton.Template>
+                            </RepeatButton>
+                        </Track.DecreaseRepeatButton>
+                        <Track.IncreaseRepeatButton>
+                            <RepeatButton>
+                                <RepeatButton.Template>
+                                    <ControlTemplate TargetType="RepeatButton">
+                                        <Rectangle Fill="Wheat" Height="5"/>
+                                    </ControlTemplate>
+                                </RepeatButton.Template>
+                            </RepeatButton>
+                        </Track.IncreaseRepeatButton>
+                        <Track.Thumb>
+                            <Thumb Foreground="{TemplateBinding Foreground}">
+                                <Thumb.Template>
+                                    <ControlTemplate TargetType="Thumb">
+                                        <Ellipse Width="10" Height="10" Fill="{TemplateBinding Foreground}"/>
+                                    </ControlTemplate>
+                                </Thumb.Template>
+                            </Thumb>
+                        </Track.Thumb>
+                    </Track>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

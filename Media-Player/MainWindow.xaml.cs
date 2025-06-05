@@ -159,13 +159,13 @@ namespace Media_Player
 
         private void BtnPause_Checked(object sender, RoutedEventArgs e)
         {
-            btnPause.Content = "Play";
+            imPauseContent.Source = new BitmapImage(new Uri(@"/Resources/Images/Play.png", UriKind.Relative));
             mePlayer.Pause();
         }
 
         private void BtnPause_Unchecked(object sender, RoutedEventArgs e)
         {
-            btnPause.Content = "Pause";
+            imPauseContent.Source = new BitmapImage(new Uri(@"/Resources/Images/Pause.png", UriKind.Relative));
             mePlayer.Play();
         }
 
@@ -212,7 +212,7 @@ namespace Media_Player
                             lbPreviews.ItemsSource = picturesPlaylist;
                             lbPreviews.SelectedIndex = 0;
                             lbPreviews.Visibility = Visibility.Visible;
-                            tbPicturesCount.Text = "Počet obrázků: " + picturesPlaylist.Count; 
+                            tbPicturesCount.Text = picturesPlaylist.Count + "x  "; 
                         }
                         else
                         {
@@ -287,14 +287,20 @@ namespace Media_Player
             
             if (btnSlideshow.IsChecked !=null && btnSlideshow.IsChecked == true)
             {
-                if (!int.TryParse(tbxDelay.Text, out slideshow))
+                if (int.TryParse(tbxDelay.Text, out slideshow))
                 {
+                    tbxDelay.IsEnabled = false;
+                }
+                else
+                {
+                    tbxDelay.IsEnabled = true;
                     btnSlideshow.IsEnabled = false;
                     slideshow = 0;
                 }
             }
             else
             {
+                tbxDelay.IsEnabled = true;
                 slideshow = 0;
             }
         }
@@ -309,6 +315,19 @@ namespace Media_Player
         {
             dpControlPanel.Visibility=Visibility.Visible;
             btnShowPanel.Visibility=Visibility.Collapsed;
+        }
+
+        private void tbxDelay_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            tbxDelay.Text = string.Empty;
+        }
+
+        private void tbxDelay_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            if(tbxDelay.Text == string.Empty)
+            {
+                tbxDelay.Text = "5";
+            }
         }
     }
 }

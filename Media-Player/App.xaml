@@ -4,6 +4,13 @@
              xmlns:local="clr-namespace:Media_Player"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/LeftSideButtons.xaml"/>
+                <ResourceDictionary Source="/Resources/Sliders.xaml"/>
+                <ResourceDictionary Source="/Resources/RightSideButtons.xaml"/>
+                <ResourceDictionary Source="/Resources/TexrsInBorder.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>
