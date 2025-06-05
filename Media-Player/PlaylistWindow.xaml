@@ -51,7 +51,7 @@
                 <Button x:Name="btnAddFolder" Content="Přidej složku" Click="BtnAddFolder_Click"/>
                 <Button x:Name="btnAddFile" Content="Přidej soubor" Click="BtnAddFile_Click"/>
                 <Button x:Name="btnRemovePath" Content="Smaž" Click="BtnRemovePath_Click"/>
-                <Button x:Name="btnDown" Content="Dolu" Margin="0,0,0,20"/>
+                <Button x:Name="btnDown" Content="Dolu" Margin="0,0,0,20" Click="BtnDown_Click"/>
                 <TextBlock Text="Položky"/>
                 <TextBlock Text="přidávat:"/>
                 <RadioButton x:Name="rbAddToEnd" Content="na konec" IsChecked="True"/>

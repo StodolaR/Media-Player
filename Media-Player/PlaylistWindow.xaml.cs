@@ -292,34 +292,85 @@ namespace Media_Player
 
         private void BtnRemovePath_Click(object sender, RoutedEventArgs e)
         {
-            if (lbFilenames.SelectedItem == null || SelectedPlaylist == null ||((string)lbFilenames.SelectedItem).EndsWith("]")) return;
-            int index = lbFilenames.SelectedIndex;
-            if (((string)lbFilenames.SelectedItem).StartsWith("["))
+            if (lbFilenames.SelectedItem == null || SelectedPlaylist == null ||((string)lbFilenames.SelectedItem).StartsWith("[KONEC")) return;
+            int selectedIndex = lbFilenames.SelectedIndex;
+            if (((string)lbFilenames.SelectedItem).StartsWith("[SLOŽKA"))
             {
-                int folderRemoved = 1;
-                SelectedPlaylist.Paths.RemoveAt(index);
-                while (folderRemoved > 0)
+                int foldersRemoved = 1;
+                SelectedPlaylist.Paths.RemoveAt(selectedIndex);
+                while (foldersRemoved > 0)
                 {
-                    if (SelectedPlaylist.Paths[index].StartsWith("[SLOŽKA"))
+                    if (SelectedPlaylist.Paths[selectedIndex].StartsWith("[SLOŽKA"))
                     {
-                        folderRemoved++;
+                        foldersRemoved++;
                     }
-                    else if (SelectedPlaylist.Paths[index].StartsWith("[KONEC"))
+                    else if (SelectedPlaylist.Paths[selectedIndex].StartsWith("[KONEC"))
                     {
-                        folderRemoved--;
+                        foldersRemoved--;
                     }
-                    SelectedPlaylist.Paths.RemoveAt(index);
+                    SelectedPlaylist.Paths.RemoveAt(selectedIndex);
                 }
             }
             else
             {
-                SelectedPlaylist.Paths.RemoveAt(index);
+                SelectedPlaylist.Paths.RemoveAt(selectedIndex);
             }
         }
 
         private void btnUp_Click(object sender, RoutedEventArgs e)
         {
-            //if(lbFilenames.SelectedIndex == 0 || ) return;
+            if(SelectedPlaylist == null || lbFilenames.SelectedItem == null || lbFilenames.SelectedIndex == 0
+            || SelectedPlaylist.Paths[lbFilenames.SelectedIndex].StartsWith("[KONEC")) return;
+            int selectedIndex = lbFilenames.SelectedIndex;
+            int itemsCount = 1;
+            int foldersMoved = 1;
+            if (SelectedPlaylist.Paths[selectedIndex].StartsWith("[SLOŽKA"))
+            {
+                while (foldersMoved > 0)
+                {
+                    if (SelectedPlaylist.Paths[selectedIndex + itemsCount].StartsWith("[SLOŽKA"))
+                    {
+                        foldersMoved++;
+                    }
+                    else if (SelectedPlaylist.Paths[selectedIndex + itemsCount].StartsWith("[KONEC"))
+                    {
+                        foldersMoved--;
+                    }
+                    itemsCount++;
+                }
+            }
+            string skippedItem = SelectedPlaylist.Paths[selectedIndex - 1];
+            SelectedPlaylist.Paths.RemoveAt(selectedIndex - 1);
+            SelectedPlaylist.Paths.Insert(selectedIndex - 1 + itemsCount, skippedItem);
+        }
+
+        private void BtnDown_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectedPlaylist == null || lbFilenames.SelectedItem == null 
+                || SelectedPlaylist.Paths[lbFilenames.SelectedIndex].StartsWith("[KONEC")
+                || lbFilenames.SelectedIndex == lbFilenames.Items.Count - 1) return;
+            int selectedIndex = lbFilenames.SelectedIndex;
+            int itemsCount = 1;
+            int foldersMoved = 1;
+            if (SelectedPlaylist.Paths[selectedIndex].StartsWith("[SLOŽKA"))
+            {
+                while (foldersMoved > 0)
+                {
+                    if (SelectedPlaylist.Paths[selectedIndex + itemsCount].StartsWith("[SLOŽKA"))
+                    {
+                        foldersMoved++;
+                    }
+                    else if (SelectedPlaylist.Paths[selectedIndex + itemsCount].StartsWith("[KONEC"))
+                    {
+                        foldersMoved--;
+                    }
+                    itemsCount++;
+                }
+            }
+            if(lbFilenames.SelectedIndex == lbFilenames.Items.Count - itemsCount) return;
+            string skippedItem = SelectedPlaylist.Paths[selectedIndex + itemsCount];
+            SelectedPlaylist.Paths.RemoveAt(selectedIndex + itemsCount);
+            SelectedPlaylist.Paths.Insert(selectedIndex, skippedItem);
         }
     }
 }

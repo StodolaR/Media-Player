@@ -127,6 +127,8 @@ namespace Media_Player
         private void BtnVideo_Click(object sender, RoutedEventArgs e)
         {
             spSlideshow.Visibility = Visibility.Collapsed;
+            picturesPlaylist.Clear();
+            lbPreviews.Items.Refresh();
             imPicture.Source = null;
             if(mePlayer.Source != null && mePlayer.Source.AbsolutePath.EndsWith("mp3"))
             {
@@ -151,7 +153,6 @@ namespace Media_Player
             slProgress.IsEnabled = false;
             playlistCounter = 0;
             mediaPlaylist.Clear();
-            picturesPlaylist.Clear();
             tbProgressTime.Text = "0:00:00/0:00:00";
             tbFilename.Text = "Nazev souboru";
         }
