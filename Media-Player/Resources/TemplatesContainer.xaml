@@ -88,6 +88,30 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
+    <ControlTemplate x:Key="upButton" TargetType="Button">
+        <Grid>
+            <Polygon x:Name="poUpButton" Points="0,20 40,0 80,20" Fill="Gold" VerticalAlignment="Center" HorizontalAlignment="Center"
+                 Stroke="DarkGoldenrod" StrokeThickness="1" Margin="2"/>
+            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="4"/>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter TargetName="poUpButton" Property="Fill" Value="DarkGoldenrod"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    <ControlTemplate x:Key="downButton" TargetType="Button">
+        <Grid>
+            <Polygon x:Name="poDownButton" Points="0,0 40,20 80,0" Fill="Gold" VerticalAlignment="Center" HorizontalAlignment="Center"
+                 Stroke="DarkGoldenrod" StrokeThickness="1" Margin="2"/>
+            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Top" Margin="4"/>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter TargetName="poDownButton" Property="Fill" Value="DarkGoldenrod"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
     <Style TargetType="Slider">
         <Setter Property="Template">
             <Setter.Value>
