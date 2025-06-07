@@ -48,13 +48,13 @@
                 </ListBox.ItemTemplate>
             </ListBox>
             <StackPanel VerticalAlignment="Center" DockPanel.Dock="Right">
-                <Button x:Name="btnUp"  Click="btnUp_Click" Template="{StaticResource upButton}" ToolTip="Přesunutí vybrané položky či složky o jednu pozici nahoru">
+                <Button x:Name="btnUp"  Click="PlaylistItemMove" Template="{StaticResource upButton}" ToolTip="Přesunutí vybrané položky či složky o jednu pozici nahoru">
                     <Polygon Points="0,12 15,0 30,12" Fill="Black"/>
                 </Button>
                 <Button x:Name="btnAddFolder" Content="Přidej složku" Click="BtnAddFolder_Click" ToolTip="Přidání složky dle nastavení níže"/>
                 <Button x:Name="btnAddFile" Content="Přidej soubor" Click="BtnAddFile_Click" ToolTip="Přidání položky dle nastavení níže"/>
                 <Button x:Name="btnRemovePath" Content="Smaž" Click="BtnRemovePath_Click" ToolTip="Odstranění vybrané položky či složky"/>
-                <Button x:Name="btnDown"  Click="BtnDown_Click" Template="{StaticResource downButton}" ToolTip="Přesunutí vybrané položky či složky o jednu pozici dolů">
+                <Button x:Name="btnDown"  Click="PlaylistItemMove" Template="{StaticResource downButton}" ToolTip="Přesunutí vybrané položky či složky o jednu pozici dolů">
                     <Polygon Points="0,0 15,12 30,0" Fill="Black"/>
                 </Button>
                 <Border Margin="5,20" CornerRadius="3" Style="{StaticResource textboxBorder}">
