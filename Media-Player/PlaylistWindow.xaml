@@ -14,8 +14,8 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
                 <StackPanel Orientation="Horizontal" Width="250">
-                    <Button x:Name="btnNew" Content="Nový" Click="BtnNew_Click"/>
-                    <Button x:Name="btnRename" Content="Prejmenuj" Click="BtnRename_Click"/>
+                    <Button x:Name="btnNew" Content="Nový" Click="BtnNew_Click" ToolTip="Vytvoření nového playlistu"/>
+                    <Button x:Name="btnRename" Content="Přejmenuj" Click="BtnRename_Click" ToolTip="Přejmenování vybraného playlistu"/>
                     <Popup x:Name="popNewName" Placement="Bottom" PlacementTarget="{Binding ElementName=btnNew}">
                         <StackPanel>
                             <TextBlock Text="Zadej název playlistu:" Background="White"/>
@@ -27,16 +27,16 @@
                             </StackPanel>
                         </StackPanel>
                     </Popup>
-                    <Button x:Name="btnRemove" Content="Smaž" Click="BtnRemove_Click"/>
-                    <ToggleButton x:Name="btnPictures" Content="Audio/obrázky" Click="BtnPictures_Click"/>
+                    <Button x:Name="btnRemove" Content="Smaž" Click="BtnRemove_Click" ToolTip="Odstranění playlistu"/>
+                    <ToggleButton x:Name="btnPictures" Content="Audio/obrázky" Click="BtnPictures_Click" ToolTip="Přepnutí mezi playlisty s audiem nebo s obrázky"/>
                 </StackPanel>
                 <WrapPanel>
                     <Border CornerRadius="7,0,0,7" Height="20" Style="{StaticResource textboxBorder}">
                         <TextBlock Text="Spusť playlist: "/>
                     </Border>
-                    <Button x:Name="btnFromBegin" Content="od začátku" Click="ChooseStartIndex"/>
+                    <Button x:Name="btnFromBegin" Content="od začátku" Click="ChooseStartIndex" ToolTip="Spuštění playlistu se všemi položkami"/>
                     <TextBlock Text="/" Foreground="White" FontSize="15"/>
-                    <Button x:Name="btnFromSelect" Content="od výběru" Click="ChooseStartIndex"/>
+                    <Button x:Name="btnFromSelect" Content="od výběru" Click="ChooseStartIndex" ToolTip="Spuštění playlistu s položkami od vybrané dále"/>
                 </WrapPanel>
             </StackPanel>
             <ListBox x:Name="lbPlaylists" DockPanel.Dock="Left" Width="250" ItemsSource="{Binding ActualPlaylists}" Foreground="White" 
@@ -48,23 +48,22 @@
                 </ListBox.ItemTemplate>
             </ListBox>
             <StackPanel VerticalAlignment="Center" DockPanel.Dock="Right">
-                <Button x:Name="btnUp" Content="Nahoru" Click="btnUp_Click"/>
-                <Button x:Name="btnAddFolder" Content="Přidej složku" Click="BtnAddFolder_Click"/>
-                <Button x:Name="btnAddFile" Content="Přidej soubor" Click="BtnAddFile_Click"/>
-                <Button x:Name="btnRemovePath" Content="Smaž" Click="BtnRemovePath_Click"/>
-                <Button x:Name="btnDown" Content="Dolu"  Click="BtnDown_Click"/>
+                <Button x:Name="btnUp" Content="Nahoru" Click="btnUp_Click" ToolTip="Přesunutí vybrané položky či složky o jednu pozici nahoru"/>
+                <Button x:Name="btnAddFolder" Content="Přidej složku" Click="BtnAddFolder_Click" ToolTip="Přidání složky dle nastavení níže"/>
+                <Button x:Name="btnAddFile" Content="Přidej soubor" Click="BtnAddFile_Click" ToolTip="Přidání položky dle nastavení níže"/>
+                <Button x:Name="btnRemovePath" Content="Smaž" Click="BtnRemovePath_Click" ToolTip="Odstranění vybrané položky či složky"/>
+                <Button x:Name="btnDown" Content="Dolu"  Click="BtnDown_Click" ToolTip="Přesunutí vybrané položky či složky o jednu pozici dolů"/>
                 <Border Margin="5,20" CornerRadius="3" Style="{StaticResource textboxBorder}">
                     <StackPanel Margin="5">
                         <TextBlock Text="Položky"/>
                         <TextBlock Text="přidávat:"/>
-                        <RadioButton x:Name="rbAddToEnd" Content="na konec" IsChecked="True"/>
-                        <RadioButton Content="Před výběr"/>
+                        <RadioButton x:Name="rbAddToEnd" Content="na konec" IsChecked="True" ToolTip="Nastavení přidávání nových položek či složek na konec seznamu"/>
+                        <RadioButton Content="Před výběr" ToolTip="Nastavení přidávání nových položek či složek před vybranou položku či složku"/>
                     </StackPanel>
                 </Border>
             </StackPanel>
             <ListBox x:Name="lbFilenames" ItemsSource="{Binding SelectedPlaylist.Paths}" Foreground="White"
                      Background="{StaticResource playlistBackground}"/>
         </DockPanel>
-        
     </Grid>
 </Window>
