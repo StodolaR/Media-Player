@@ -223,7 +223,7 @@ namespace Media_Player
 
         private void GetFinalPlaylist(int firstIndex)
         {
-            if (selectedPlaylist != null)
+            if (selectedPlaylist != null && selectedPlaylist.Paths.Count > 0)
             {
                 for (int i = firstIndex; i < selectedPlaylist.Paths.Count; i++)
                 {
