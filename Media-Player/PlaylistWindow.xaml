@@ -5,28 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Media_Player"
         mc:Ignorable="d"
-        Title="PlaylistWindow" Height="450" Width="800">
-    <Grid Margin="5">
-        <Grid.Resources>
-            <Style TargetType="ListBox">
-                <Setter Property="Margin" Value="2"/>
-                <Setter Property="Background">
-                    <Setter.Value>
-                        <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
-                            <GradientStop Color="Black" Offset="0"/>
-                            <GradientStop Color="Gray" Offset="1"/>
-                        </LinearGradientBrush>
-                    </Setter.Value>
-                </Setter>
-                <Setter Property="Foreground" Value="White"/>
-            </Style>
-        </Grid.Resources>
-        <Grid.Background>
-            <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
-                <GradientStop Color="Black" Offset="0"/>
-                <GradientStop Color="gray" Offset="1"/>
-            </LinearGradientBrush>
-        </Grid.Background>
+        Title="PlaylistWindow" Height="450" Width="800"  MinHeight="350" MinWidth="500">
+    <Grid Margin="5" Background="{StaticResource playlistBackground}">
         <DockPanel>
             <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
                 <TextBlock Text="PLAYLIST" FontSize="25" FontFamily="Wide Latin" Margin="20,5" Foreground="Gold"/>
@@ -45,7 +25,6 @@
                                 <Button x:Name="btnOk" Content="Potvrď" Click="BtnOk_Click" Width="125"/>
                                 <Button x:Name="btnCancel" Content="Zruš" Click="BtnCancel_Click" Width="125"/>
                             </StackPanel>
-
                         </StackPanel>
                     </Popup>
                     <Button x:Name="btnRemove" Content="Smaž" Click="BtnRemove_Click"/>
@@ -60,8 +39,8 @@
                     <Button x:Name="btnFromSelect" Content="od výběru" Click="ChooseStartIndex"/>
                 </WrapPanel>
             </StackPanel>
-            <ListBox x:Name="lbPlaylists" DockPanel.Dock="Left" Width="250" ItemsSource="{Binding ActualPlaylists}" 
-                     SelectedItem="{Binding SelectedPlaylist}">
+            <ListBox x:Name="lbPlaylists" DockPanel.Dock="Left" Width="250" ItemsSource="{Binding ActualPlaylists}" Foreground="White" 
+                     SelectedItem="{Binding SelectedPlaylist}" Background="{StaticResource playlistBackground}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Name}"/>
@@ -83,7 +62,8 @@
                     </StackPanel>
                 </Border>
             </StackPanel>
-            <ListBox x:Name="lbFilenames" ItemsSource="{Binding SelectedPlaylist.Paths}"/>
+            <ListBox x:Name="lbFilenames" ItemsSource="{Binding SelectedPlaylist.Paths}" Foreground="White"
+                     Background="{StaticResource playlistBackground}"/>
         </DockPanel>
         
     </Grid>

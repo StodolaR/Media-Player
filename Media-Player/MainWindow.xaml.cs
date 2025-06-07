@@ -234,7 +234,7 @@ namespace Media_Player
                             lbPreviews.ItemsSource = picturesPlaylist;
                             lbPreviews.SelectedIndex = 0;
                             lbPreviews.Visibility = Visibility.Visible;
-                            tbPicturesCount.Text = picturesPlaylist.Count + "x  "; 
+                            tbPicturesCount.Text = picturesPlaylist.Count + "x "; 
                         }
                         else
                         {

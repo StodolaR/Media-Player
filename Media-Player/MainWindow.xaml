@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Media_Player"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800" MinWidth="520" MinHeight="120">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -22,31 +22,13 @@
             </ListBox>
             <Image x:Name="imPicture"/>
         </DockPanel>
-        <DockPanel x:Name="dpControlPanel" Height="78" Grid.Row="1" Margin="3">
+        <DockPanel x:Name="dpControlPanel" Height="80" Grid.Row="1" Margin="3" Background="{StaticResource rightSideBackground}">
             <DockPanel.Resources>
                 <Style TargetType="Image">
                     <Setter Property="Width" Value="15"/>
                 </Style>
             </DockPanel.Resources>
-            <DockPanel.Background>
-                <LinearGradientBrush StartPoint="0.5 0" EndPoint="0.5 1">
-                    <GradientStop Color="Gray" Offset="0"/>
-                    <GradientStop Color="#606060" Offset="0.25"/>
-                    <GradientStop Color="Black" Offset="0.3"/>
-                    <GradientStop Color="#444444" Offset="0.35"/>
-                    <GradientStop Color="#333333" Offset="0.55"/>
-                    <GradientStop Color="LightGray" Offset="0.6"/>
-                    <GradientStop Color="#2A2A2A" Offset="0.65"/>
-                    <GradientStop Color="Black" Offset="1"/>
-                </LinearGradientBrush>
-            </DockPanel.Background>
-            <Grid DockPanel.Dock="Left">
-                <Grid.Background>
-                    <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
-                        <GradientStop Color="Gray" Offset="0"/>
-                        <GradientStop Color="Black" Offset="1"/>
-                    </LinearGradientBrush>
-                </Grid.Background>
+            <Grid DockPanel.Dock="Left" Background="{StaticResource leftSideBackground}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="20"/>
                     <ColumnDefinition Width="50"/>
@@ -63,8 +45,9 @@
                     <Image Source="/Resources/Images/Ff.png" Width="12" Margin="0"/>
                 </Button>
             </Grid>
-            <Slider x:Name="slProgress" DockPanel.Dock="Top" IsMoveToPointEnabled="True" Thumb.DragStarted="SlProgress_DragStarted" Margin="3,4" ToolTip="Průběh přehrávání" ToolTipService.ShowOnDisabled="True"
-                    Thumb.DragCompleted="SlProgress_DragCompleted" ValueChanged="slProgress_ValueChanged" IsEnabled="False" Foreground="Red"/>
+            <Slider x:Name="slProgress" DockPanel.Dock="Top" IsMoveToPointEnabled="True"  IsEnabled="False" Foreground="Red"
+                     ToolTip="Průběh přehrávání" ToolTipService.ShowOnDisabled="True" Thumb.DragStarted="SlProgress_DragStarted"
+                    Thumb.DragCompleted="SlProgress_DragCompleted" ValueChanged="slProgress_ValueChanged" Margin="3,4"/>
             <DockPanel x:Name="Controls" DockPanel.Dock="Bottom">
                 <Button x:Name="btnHide" DockPanel.Dock="Right" Click="BtnHide_Click" ToolTip="Skrytí panelu">
                     <Image Source="/Resources/Images/Collapse.png"/>
@@ -92,30 +75,32 @@
                         Foreground="DarkOrchid" Margin="3,8" ToolTip="Hlasitost"/>
                 <Image Source="/Resources/Images/VolumeWhite.png" DockPanel.Dock="Left" Height="15"/>
                 <StackPanel x:Name="spSlideshow" Orientation="Horizontal" Visibility="Visible" HorizontalAlignment="Center" >
-                    <Border CornerRadius="7,2,2,7" Margin="3" Style="{StaticResource textboxBorder}">
-                        <StackPanel Orientation="Horizontal">
+                    <Border CornerRadius="8,2,2,8" Margin="3" Style="{StaticResource textboxBorder}" Width="80">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                             <Image Source="/Resources/Images/Picture.png"  ToolTip="Počet obrázků ve výběru"/>
                             <TextBlock x:Name="tbPicturesCount" VerticalAlignment="Center" ToolTip="Počet obrázků ve výběru"/>
-                            <Image Source="/Resources/Images/Delay.png" Height="12" Margin="0" ToolTip="Zadání Časové prodlevy pro automatické procházení obrázků - Slideshow"/>
-                            <TextBox x:Name="tbxDelay" Text="5" PreviewTextInput="TbxDelay_PreviewTextInput" Width="11" FontSize="11" Height="16"
-                                     GotKeyboardFocus="tbxDelay_GotKeyboardFocus" LostKeyboardFocus="tbxDelay_LostKeyboardFocus" ToolTip="Zadání Časové prodlevy pro automatické procházení obrázků - Slideshow"/>
+                            <Image Source="/Resources/Images/Delay.png" Height="12" ToolTip="Zadání Časové prodlevy pro automatické procházení obrázků - Slideshow"/>
+                            <TextBox x:Name="tbxDelay" Text="5" PreviewTextInput="TbxDelay_PreviewTextInput" Width="11" FontSize="11" 
+                                       GotKeyboardFocus="tbxDelay_GotKeyboardFocus" LostKeyboardFocus="tbxDelay_LostKeyboardFocus" 
+                                       Height="16" ToolTip="Zadání Časové prodlevy pro automatické procházení obrázků - Slideshow"/>
                             <TextBlock Text="s" VerticalAlignment="Center" ToolTip="Zadání Časové prodlevy pro automatické procházení obrázků - Slideshow"/>
                         </StackPanel>
                     </Border>
-                    <ToggleButton Background="DarkGoldenrod" x:Name="btnSlideshow" Click="BtnSlideshow_Click"  ToolTip="Spuštění/ukončení automatického procházení obrázků - Slideshow">
+                    <ToggleButton x:Name="btnSlideshow" Click="BtnSlideshow_Click" ToolTip="Spuštění/ukončení automatického procházení obrázků - Slideshow">
                         <Image Source="/Resources/Images/Slideshow.png"/>
                     </ToggleButton>
                 </StackPanel>
             </DockPanel>
-            <Border  CornerRadius="0,0,10,10" DockPanel.Dock="Right" Width="100" Margin="0,3,5,5" Style="{StaticResource textboxBorder}" ToolTip="Čas přehrávání/celkový čas">
+            <Border  CornerRadius="0,0,11,11" DockPanel.Dock="Right" Width="100" Margin="0,3,3,9" Style="{StaticResource textboxBorder}" ToolTip="Čas přehrávání/celkový čas">
                 <TextBlock x:Name="tbProgressTime" Text="0:00:00/0:00:00" HorizontalAlignment="Center"/>
             </Border>
-            <Border CornerRadius="7" Margin="1,5" HorizontalAlignment="Center" MinWidth="300" ToolTip="Název přehrávaného souboru" Style="{StaticResource textboxBorder}">
+            <Border CornerRadius="10" Margin="1,6" HorizontalAlignment="Center" MinWidth="300" ToolTip="Název přehrávaného souboru" Style="{StaticResource textboxBorder}">
                 <TextBlock x:Name="tbFilename" Text="Název souboru" HorizontalAlignment="Center"/>
             </Border>
         </DockPanel>
-        <Button x:Name="btnShowPanel" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="BtnShowPanel_Click" Visibility="Collapsed" ToolTip="Zobrazení panelu">
-            <Image Source="/Resources/Images/Maximize.png" Width="15" Margin="2"/>
+        <Button x:Name="btnShowPanel" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="BtnShowPanel_Click" 
+                Visibility="Collapsed" ToolTip="Zobrazení panelu" Margin="2">
+            <Image Source="/Resources/Images/Maximize.png" Width="15" Margin="0,2"/>
         </Button>
     </Grid>
 </Window>
