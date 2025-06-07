@@ -53,15 +53,15 @@
                     <ColumnDefinition Width="40"/>
                     <ColumnDefinition Width="25"/>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="btnLast" Click="BtnLast_Click" Style="{StaticResource lastBtnStyle}" ToolTip="Předchozí položka">
-                    <Image Source="/Resources/Images/Rew.png" Width="12"/>
+                <Button x:Name="btnLast" Click="BtnLast_Click" ToolTip="Předchozí položka" Template="{StaticResource lastButton}">
+                    <Image Source="/Resources/Images/Rew.png" Width="12" Margin="0"/>
                 </Button>
                 <ToggleButton x:Name="btnPause" Grid.Column="1" Width="35" IsEnabled="False" ToolTip="Pauza/spuštění" ToolTipService.ShowOnDisabled="True"
-                              Checked="BtnPause_Checked" Unchecked="BtnPause_Unchecked" Style="{StaticResource pauseBtnStyle}">
+                              Checked="BtnPause_Checked" Unchecked="BtnPause_Unchecked" Template="{StaticResource pauseButton}">
                     <Image Source="/Resources/Images/Pause.png" Width="15" x:Name="imPauseContent"/>
                 </ToggleButton>
-                <Button x:Name="btnNext"  Grid.Column="2" Click="BtnNext_Click" Style="{StaticResource nextBtnStyle}" ToolTip="Následující položka">
-                    <Image Source="/Resources/Images/Ff.png" Width="12"/>
+                <Button x:Name="btnNext"  Grid.Column="2" Click="BtnNext_Click" Template="{StaticResource nextButton}" ToolTip="Následující položka">
+                    <Image Source="/Resources/Images/Ff.png" Width="12" Margin="0"/>
                 </Button>
             </Grid>
             <Slider x:Name="slProgress" DockPanel.Dock="Top" IsMoveToPointEnabled="True" Thumb.DragStarted="SlProgress_DragStarted" Margin="3,4" ToolTip="Průběh přehrávání" ToolTipService.ShowOnDisabled="True"
@@ -76,26 +76,12 @@
                 <Button x:Name="btnOpen" DockPanel.Dock="Right" Click="BtnOpen_Click" ToolTip="Otevření souboru">
                     <Image Source="/Resources/Images/Open.png"/>
                 </Button>
-                <RadioButton x:Name="btnVideo" DockPanel.Dock="Right" Margin="1,3,5,3" Checked="btnVideo_Checked" ToolTip="Přepnutí do režimu video"
-                             Style="{StaticResource RadioBtnStyle}" Width="35">
-                    <RadioButton.Template>
-                        <ControlTemplate TargetType="RadioButton">
-                            <Border CornerRadius="0,7,7,0" Background="{TemplateBinding Background}">
-                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>
-                        </ControlTemplate>
-                    </RadioButton.Template>
+                <RadioButton x:Name="btnVideo" DockPanel.Dock="Right" Checked="btnVideo_Checked" Width="35" 
+                             Template="{StaticResource videoButton}" ToolTip="Přepnutí do režimu video">
                     <Image Source="/Resources/Images/Video.png"/>
                 </RadioButton>
-                <RadioButton x:Name="btnAudio" Margin="5,3,1,3" DockPanel.Dock="Right" IsChecked="True" ToolTip="Přepnutí do režimu audio + obrázky"
-                             Style="{StaticResource RadioBtnStyle}" Checked="btnAudio_Checked">
-                    <RadioButton.Template>
-                        <ControlTemplate TargetType="RadioButton">
-                            <Border CornerRadius="7,0,0,7" Background="{TemplateBinding Background}">
-                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>
-                        </ControlTemplate>
-                    </RadioButton.Template>
+                <RadioButton x:Name="btnAudio" DockPanel.Dock="Right" IsChecked="True" Checked="btnAudio_Checked" 
+                             Template="{StaticResource audioButton}" ToolTip="Přepnutí do režimu audio + obrázky">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/Images/Audio.png"/>
                         <TextBlock Text="/"/>
@@ -104,28 +90,28 @@
                 </RadioButton>
                 
                 <Slider x:Name="slVolume" Width="70" DockPanel.Dock="Left" Maximum="1" Value="0.7" ValueChanged="SlVolume_ValueChanged"
-                        Foreground="#6655DD" Margin="3,8" ToolTip="Hlasitost"/>
+                        Foreground="DarkOrchid" Margin="3,8" ToolTip="Hlasitost"/>
                 <Image Source="/Resources/Images/VolumeWhite.png" DockPanel.Dock="Left" Height="15"/>
-                <StackPanel x:Name="spSlideshow" Orientation="Horizontal" Visibility="Collapsed" HorizontalAlignment="Center" Height="22" Margin="2">
-                    <Border CornerRadius="7,2,2,7">
+                <StackPanel x:Name="spSlideshow" Orientation="Horizontal" Visibility="Visible" HorizontalAlignment="Center" >
+                    <Border CornerRadius="7,2,2,7" Margin="2" Style="{StaticResource textboxBorder}">
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/Resources/Images/Picture.png" Height="14" ToolTip="Počet obrázků ve výběru"/>
+                            <Image Source="/Resources/Images/Picture.png"  ToolTip="Počet obrázků ve výběru"/>
                             <TextBlock x:Name="tbPicturesCount" VerticalAlignment="Center" ToolTip="Počet obrázků ve výběru"/>
                             <Image Source="/Resources/Images/Delay.png" Height="12" Margin="0" ToolTip="Zadání Časové prodlevy pro automatické procházení obrázků - Slideshow"/>
-                            <TextBox x:Name="tbxDelay" Text="5" PreviewTextInput="TbxDelay_PreviewTextInput" Width="10" 
+                            <TextBox x:Name="tbxDelay" Text="5" PreviewTextInput="TbxDelay_PreviewTextInput" Width="11" 
                                      GotKeyboardFocus="tbxDelay_GotKeyboardFocus" LostKeyboardFocus="tbxDelay_LostKeyboardFocus" ToolTip="Zadání Časové prodlevy pro automatické procházení obrázků - Slideshow"/>
                             <TextBlock Text="s" VerticalAlignment="Center" ToolTip="Zadání Časové prodlevy pro automatické procházení obrázků - Slideshow"/>
                         </StackPanel>
                     </Border>
-                    <ToggleButton Background="DarkGoldenrod" x:Name="btnSlideshow" Click="BtnSlideshow_Click" Margin="2,0" ToolTip="Spuštění/ukončení automatického procházení obrázků - Slideshow">
+                    <ToggleButton Background="DarkGoldenrod" x:Name="btnSlideshow" Click="BtnSlideshow_Click"  ToolTip="Spuštění/ukončení automatického procházení obrázků - Slideshow">
                         <Image Source="/Resources/Images/Slideshow.png"/>
                     </ToggleButton>
                 </StackPanel>
             </DockPanel>
-            <Border x:Name="brdProgressTime" CornerRadius="0,0,10,10" DockPanel.Dock="Right" Width="100" Margin="0,3,5,5" ToolTip="Čas přehrávání/celkový čas">
+            <Border  CornerRadius="0,0,10,10" DockPanel.Dock="Right" Width="100" Margin="0,3,5,5" Style="{StaticResource textboxBorder}" ToolTip="Čas přehrávání/celkový čas">
                 <TextBlock x:Name="tbProgressTime" Text="0:00:00/0:00:00" HorizontalAlignment="Center"/>
             </Border>
-            <Border x:Name="brdFilename" CornerRadius="7" Margin="1,5" Width="300" ToolTip="Název přehrávaného souboru">
+            <Border CornerRadius="7" Margin="1,5" Width="300" ToolTip="Název přehrávaného souboru" Style="{StaticResource textboxBorder}">
                 <TextBlock x:Name="tbFilename" Text="Název souboru" HorizontalAlignment="Center"/>
             </Border>
         </DockPanel>

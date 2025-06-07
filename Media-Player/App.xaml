@@ -6,10 +6,8 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Resources/LeftSideButtons.xaml"/>
-                <ResourceDictionary Source="/Resources/Sliders.xaml"/>
-                <ResourceDictionary Source="/Resources/RightSideButtons.xaml"/>
-                <ResourceDictionary Source="/Resources/TexrsInBorder.xaml"/>
+                <ResourceDictionary Source="/Resources/TemplatesContainer.xaml"/>
+                <ResourceDictionary Source="/Resources/BackgroundsContainer.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

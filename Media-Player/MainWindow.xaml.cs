@@ -28,9 +28,9 @@ namespace Media_Player
         private int playlistCounter;
         private List<string> mediaPlaylist;
         private List<string> picturesPlaylist;
-        public const string videoExtensions = "mov;mp4";
+        public const string videoExtensions = "mov;mp4;avi;wmv";
         public const string audioExtensions = "mp3";
-        public const string pictureExtensions = "jpg;png";
+        public const string pictureExtensions = "jpg;png;gif;tif;bmp";
         public MainWindow()
         {
             InitializeComponent();
