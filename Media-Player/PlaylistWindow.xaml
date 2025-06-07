@@ -22,7 +22,7 @@
                             <TextBox x:Name="tbNewName" Width="250"/>
                             <TextBlock x:Name="tbNameExist" Background="White" Text="Název již existuje, zvolte jiný" Visibility="Collapsed"/>
                             <StackPanel Orientation="Horizontal">
-                                <Button x:Name="btnOk" Content="Potvrď" Click="BtnOk_Click" Width="125"/>
+                                <Button x:Name="btnOk" Content="Potvrď" Click="BtnOk_Click" Width="125" IsDefault="True"/>
                                 <Button x:Name="btnCancel" Content="Zruš" Click="BtnCancel_Click" Width="125"/>
                             </StackPanel>
                         </StackPanel>

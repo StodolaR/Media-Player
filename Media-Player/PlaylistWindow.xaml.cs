@@ -133,6 +133,7 @@ namespace Media_Player
         {
             popNewName.IsOpen = true;
             popNewName.Tag = "New";
+            tbNewName.Focus();
         }
 
         private void BtnOk_Click(object sender, RoutedEventArgs e)
@@ -173,6 +174,7 @@ namespace Media_Player
             {
                 popNewName.IsOpen = true;
                 popNewName.Tag = "Rename";
+                tbNewName.Focus();
             }
         }
 
@@ -342,6 +344,7 @@ namespace Media_Player
             string skippedItem = SelectedPlaylist.Paths[selectedIndex - 1];
             SelectedPlaylist.Paths.RemoveAt(selectedIndex - 1);
             SelectedPlaylist.Paths.Insert(selectedIndex - 1 + itemsCount, skippedItem);
+            lbFilenames.SelectedIndex= selectedIndex-1;
         }
 
         private void BtnDown_Click(object sender, RoutedEventArgs e)
