@@ -310,16 +310,11 @@ namespace Media_Player
             }
         }
 
-        private void BtnHide_Click(object sender, RoutedEventArgs e)
+        private void HideOrShowPanel(object sender, RoutedEventArgs e)
         {
-            dpControlPanel.Visibility = Visibility.Collapsed;
-            btnShowPanel.Visibility = Visibility.Visible;
-        }
-
-        private void BtnShowPanel_Click(object sender, RoutedEventArgs e)
-        {
-            dpControlPanel.Visibility=Visibility.Visible;
-            btnShowPanel.Visibility=Visibility.Collapsed;
+            Visibility backupVisibility = dpControlPanel.Visibility;
+            dpControlPanel.Visibility = btnShowPanel.Visibility;
+            btnShowPanel.Visibility = backupVisibility;
         }
 
         private void tbxDelay_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)

@@ -49,7 +49,7 @@
                      ToolTip="Průběh přehrávání" ToolTipService.ShowOnDisabled="True" Thumb.DragStarted="SlProgress_DragStarted"
                     Thumb.DragCompleted="SlProgress_DragCompleted" ValueChanged="slProgress_ValueChanged" Margin="3,4"/>
             <DockPanel x:Name="Controls" DockPanel.Dock="Bottom">
-                <Button x:Name="btnHide" DockPanel.Dock="Right" Click="BtnHide_Click" ToolTip="Skrytí panelu">
+                <Button x:Name="btnHide" DockPanel.Dock="Right" Click="HideOrShowPanel" ToolTip="Skrytí panelu">
                     <Image Source="/Resources/Images/Collapse.png"/>
                 </Button>
                 <Button x:Name="btnPlaylist" DockPanel.Dock="Right" Click="BtnPlaylist_Click" ToolTip="Nastavení playlistů">
@@ -98,7 +98,7 @@
                 <TextBlock x:Name="tbFilename" Text="Název souboru" HorizontalAlignment="Center"/>
             </Border>
         </DockPanel>
-        <Button x:Name="btnShowPanel" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="BtnShowPanel_Click" 
+        <Button x:Name="btnShowPanel" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="HideOrShowPanel" 
                 Visibility="Collapsed" ToolTip="Zobrazení panelu" Margin="2">
             <Image Source="/Resources/Images/Maximize.png" Width="15" Margin="0,2"/>
         </Button>

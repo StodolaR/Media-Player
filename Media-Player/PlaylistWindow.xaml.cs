@@ -302,7 +302,6 @@ namespace Media_Player
             SelectedPlaylist.Paths.Insert(selectedIndex - 1 + itemsCount, skippedItem);
             lbFilenames.SelectedIndex = selectedIndex - 1;
         }
-
         private void BtnDown_Click(object sender, RoutedEventArgs e)
         {
             if (SelectedPlaylist == null || lbFilenames.SelectedItem == null
