@@ -26,7 +26,6 @@
             <DockPanel.Resources>
                 <Style TargetType="Image">
                     <Setter Property="Width" Value="15"/>
-                    <Setter Property="Margin" Value="2"/>
                 </Style>
             </DockPanel.Resources>
             <DockPanel.Background>
@@ -49,14 +48,14 @@
                     </LinearGradientBrush>
                 </Grid.Background>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="25"/>
-                    <ColumnDefinition Width="40"/>
-                    <ColumnDefinition Width="25"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="20"/>
                 </Grid.ColumnDefinitions>
                 <Button x:Name="btnLast" Click="BtnLast_Click" ToolTip="Předchozí položka" Template="{StaticResource lastButton}">
                     <Image Source="/Resources/Images/Rew.png" Width="12" Margin="0"/>
                 </Button>
-                <ToggleButton x:Name="btnPause" Grid.Column="1" Width="35" IsEnabled="False" ToolTip="Pauza/spuštění" ToolTipService.ShowOnDisabled="True"
+                <ToggleButton x:Name="btnPause" Grid.Column="1" IsEnabled="False" ToolTip="Pauza/spuštění" ToolTipService.ShowOnDisabled="True"
                               Checked="BtnPause_Checked" Unchecked="BtnPause_Unchecked" Template="{StaticResource pauseButton}">
                     <Image Source="/Resources/Images/Pause.png" Width="15" x:Name="imPauseContent"/>
                 </ToggleButton>
@@ -93,12 +92,12 @@
                         Foreground="DarkOrchid" Margin="3,8" ToolTip="Hlasitost"/>
                 <Image Source="/Resources/Images/VolumeWhite.png" DockPanel.Dock="Left" Height="15"/>
                 <StackPanel x:Name="spSlideshow" Orientation="Horizontal" Visibility="Visible" HorizontalAlignment="Center" >
-                    <Border CornerRadius="7,2,2,7" Margin="2" Style="{StaticResource textboxBorder}">
+                    <Border CornerRadius="7,2,2,7" Margin="3" Style="{StaticResource textboxBorder}">
                         <StackPanel Orientation="Horizontal">
                             <Image Source="/Resources/Images/Picture.png"  ToolTip="Počet obrázků ve výběru"/>
                             <TextBlock x:Name="tbPicturesCount" VerticalAlignment="Center" ToolTip="Počet obrázků ve výběru"/>
                             <Image Source="/Resources/Images/Delay.png" Height="12" Margin="0" ToolTip="Zadání Časové prodlevy pro automatické procházení obrázků - Slideshow"/>
-                            <TextBox x:Name="tbxDelay" Text="5" PreviewTextInput="TbxDelay_PreviewTextInput" Width="11" 
+                            <TextBox x:Name="tbxDelay" Text="5" PreviewTextInput="TbxDelay_PreviewTextInput" Width="11" FontSize="11" Height="16"
                                      GotKeyboardFocus="tbxDelay_GotKeyboardFocus" LostKeyboardFocus="tbxDelay_LostKeyboardFocus" ToolTip="Zadání Časové prodlevy pro automatické procházení obrázků - Slideshow"/>
                             <TextBlock Text="s" VerticalAlignment="Center" ToolTip="Zadání Časové prodlevy pro automatické procházení obrázků - Slideshow"/>
                         </StackPanel>
@@ -111,7 +110,7 @@
             <Border  CornerRadius="0,0,10,10" DockPanel.Dock="Right" Width="100" Margin="0,3,5,5" Style="{StaticResource textboxBorder}" ToolTip="Čas přehrávání/celkový čas">
                 <TextBlock x:Name="tbProgressTime" Text="0:00:00/0:00:00" HorizontalAlignment="Center"/>
             </Border>
-            <Border CornerRadius="7" Margin="1,5" Width="300" ToolTip="Název přehrávaného souboru" Style="{StaticResource textboxBorder}">
+            <Border CornerRadius="7" Margin="1,5" HorizontalAlignment="Center" MinWidth="300" ToolTip="Název přehrávaného souboru" Style="{StaticResource textboxBorder}">
                 <TextBlock x:Name="tbFilename" Text="Název souboru" HorizontalAlignment="Center"/>
             </Border>
         </DockPanel>
