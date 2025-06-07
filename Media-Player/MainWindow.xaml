@@ -11,7 +11,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <MediaElement Name="mePlayer" LoadedBehavior="Manual" MediaEnded="MePlayer_MediaEnded"/>
+        <MediaElement Name="mePlayer" LoadedBehavior="Manual" MediaEnded="NextPlaylistItem"/>
         <DockPanel x:Name="dPPictures">
             <ListBox x:Name="lbPreviews" DockPanel.Dock="Right" Visibility="Collapsed" SelectionChanged="LbPreviews_SelectionChanged">
                 <ListBox.ItemTemplate>
@@ -34,14 +34,14 @@
                     <ColumnDefinition Width="50"/>
                     <ColumnDefinition Width="20"/>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="btnLast" Click="BtnLast_Click" ToolTip="Předchozí položka" Template="{StaticResource lastButton}">
+                <Button x:Name="btnLast" Click="LastPlaylistItem" ToolTip="Předchozí položka" Template="{StaticResource lastButton}">
                     <Image Source="/Resources/Images/Rew.png" Width="12" Margin="0"/>
                 </Button>
                 <ToggleButton x:Name="btnPause" Grid.Column="1" IsEnabled="False" ToolTip="Pauza/spuštění" ToolTipService.ShowOnDisabled="True"
                               Checked="BtnPause_Checked" Unchecked="BtnPause_Unchecked" Template="{StaticResource pauseButton}">
                     <Image Source="/Resources/Images/Pause.png" Width="15" x:Name="imPauseContent"/>
                 </ToggleButton>
-                <Button x:Name="btnNext"  Grid.Column="2" Click="BtnNext_Click" Template="{StaticResource nextButton}" ToolTip="Následující položka">
+                <Button x:Name="btnNext"  Grid.Column="2" Click="NextPlaylistItem" Template="{StaticResource nextButton}" ToolTip="Následující položka">
                     <Image Source="/Resources/Images/Ff.png" Width="12" Margin="0"/>
                 </Button>
             </Grid>

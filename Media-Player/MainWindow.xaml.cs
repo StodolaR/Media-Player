@@ -22,10 +22,10 @@ namespace Media_Player
     /// </summary>
     public partial class MainWindow : Window
     {
-        private int slideshow;
+        private int slideshowInterval;
         private int countdown;
         private bool positionAdjustment;
-        private int playlistCounter;
+        private int playlistIndex;
         private List<string> mediaPlaylist;
         private List<string> picturesPlaylist;
         public const string videoExtensions = "mov;mp4;avi;wmv";
@@ -50,11 +50,11 @@ namespace Media_Player
                 slProgress.Maximum = mePlayer.NaturalDuration.TimeSpan.TotalSeconds;
                 slProgress.Value = mePlayer.Position.TotalSeconds;
             }
-            if(slideshow > 0)
+            if(slideshowInterval > 0)
             {
                 if(countdown == 0)
                 {
-                    countdown = slideshow;
+                    countdown = slideshowInterval;
                     if(lbPreviews.SelectedIndex < lbPreviews.Items.Count - 1)
                     {
                         lbPreviews.SelectedIndex++;
@@ -62,7 +62,7 @@ namespace Media_Player
                     }
                     else
                     {
-                        countdown = slideshow = 0;
+                        countdown = slideshowInterval = 0;
                         btnSlideshow.IsChecked = false;
                         return;
                     }
@@ -121,7 +121,7 @@ namespace Media_Player
             btnPause.IsEnabled = true;
             mePlayer.Source = new Uri(mediaPlaylist[0]);
             CombineFilenames(IOPath.GetFileName(fileName));
-            playlistCounter = 0;
+            playlistIndex = 0;
             slProgress.IsEnabled = true;
             slProgress.Value = 0;
             mePlayer.Play();
@@ -158,7 +158,7 @@ namespace Media_Player
             btnPause.IsEnabled = false;
             slProgress.Value = 0;
             slProgress.IsEnabled = false;
-            playlistCounter = 0;
+            playlistIndex = 0;
             mediaPlaylist.Clear();
             tbProgressTime.Text = "0:00:00/0:00:00";
             tbFilename.Text = "Nazev souboru";
@@ -248,28 +248,23 @@ namespace Media_Player
             }
         }
 
-        private void MePlayer_MediaEnded(object sender, RoutedEventArgs e)
+        private void NextPlaylistItem(object sender, RoutedEventArgs e)
         {
-            if ((playlistCounter) == mediaPlaylist.Count -1) return;
-            mePlayer.Source = new Uri(mediaPlaylist[++playlistCounter]);
-            slProgress.Value = 0;
-            CombineFilenames(IOPath.GetFileName(mediaPlaylist[playlistCounter]));
+            ChangePlaylistItem(mediaPlaylist.Count - 1, 1);
         }
 
-        private void BtnLast_Click(object sender, RoutedEventArgs e)
+        private void LastPlaylistItem(object sender, RoutedEventArgs e)
         {
-            if(playlistCounter == 0) return;
-            mePlayer.Source = new Uri(mediaPlaylist[--playlistCounter]);
-            slProgress.Value = 0;
-            tbFilename.Text = IOPath.GetFileName(mediaPlaylist[playlistCounter]);
+            ChangePlaylistItem(0, -1);
         }
 
-        private void BtnNext_Click(object sender, RoutedEventArgs e)
+        private void ChangePlaylistItem(int limitPosition, int increment)
         {
-            if (playlistCounter >= mediaPlaylist.Count-1) return;
-            mePlayer.Source = new Uri(mediaPlaylist[++playlistCounter]);
+            if ((playlistIndex) == limitPosition) return;
+            playlistIndex += increment;
+            mePlayer.Source = new Uri(mediaPlaylist[playlistIndex]);
             slProgress.Value = 0;
-            tbFilename.Text = IOPath.GetFileName(mediaPlaylist[playlistCounter]);
+            CombineFilenames(IOPath.GetFileName(mediaPlaylist[playlistIndex]));
         }
 
         private void LbPreviews_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -297,7 +292,7 @@ namespace Media_Player
             
             if (btnSlideshow.IsChecked !=null && btnSlideshow.IsChecked == true)
             {
-                if (int.TryParse(tbxDelay.Text, out slideshow))
+                if (int.TryParse(tbxDelay.Text, out slideshowInterval))
                 {
                     tbxDelay.IsEnabled = false;
                 }
@@ -305,13 +300,13 @@ namespace Media_Player
                 {
                     tbxDelay.IsEnabled = true;
                     btnSlideshow.IsEnabled = false;
-                    slideshow = 0;
+                    slideshowInterval = 0;
                 }
             }
             else
             {
                 tbxDelay.IsEnabled = true;
-                slideshow = 0;
+                slideshowInterval = 0;
             }
         }
 
