@@ -225,7 +225,7 @@ namespace Media_Player
             {
                 for (int i = firstIndex; i < selectedPlaylist.Paths.Count; i++)
                 {
-                    if (!selectedPlaylist.Paths[i].StartsWith("["))
+                    if (!selectedPlaylist.Paths[i].StartsWith("  ["))
                     {
                         FinalResult.Add(selectedPlaylist.Paths[i]);
                     }
@@ -274,7 +274,7 @@ namespace Media_Player
                 {
                     insertIndex = lbFilenames.SelectedIndex;
                 }
-                SelectedPlaylist.Paths.Insert(insertIndex++, "[SLOŽKA] " + ofold.FolderName);
+                SelectedPlaylist.Paths.Insert(insertIndex++, "  [ SLOŽKA ] " + ofold.FolderName);
                 foreach (string file in filesInFolder)
                 {
                     foreach(string extension in searchedExtensions)
@@ -286,25 +286,25 @@ namespace Media_Player
                         }
                     }
                 }
-                SelectedPlaylist.Paths.Insert(insertIndex, "[KONEC SLOŽKY]");
+                SelectedPlaylist.Paths.Insert(insertIndex, "  [ KONEC SLOŽKY ]");
             }
         }
 
         private void BtnRemovePath_Click(object sender, RoutedEventArgs e)
         {
-            if (lbFilenames.SelectedItem == null || SelectedPlaylist == null ||((string)lbFilenames.SelectedItem).StartsWith("[KONEC")) return;
+            if (lbFilenames.SelectedItem == null || SelectedPlaylist == null ||((string)lbFilenames.SelectedItem).StartsWith("  [ KONEC")) return;
             int selectedIndex = lbFilenames.SelectedIndex;
-            if (((string)lbFilenames.SelectedItem).StartsWith("[SLOŽKA"))
+            if (((string)lbFilenames.SelectedItem).StartsWith("  [ SLOŽKA"))
             {
                 int foldersRemoved = 1;
                 SelectedPlaylist.Paths.RemoveAt(selectedIndex);
                 while (foldersRemoved > 0)
                 {
-                    if (SelectedPlaylist.Paths[selectedIndex].StartsWith("[SLOŽKA"))
+                    if (SelectedPlaylist.Paths[selectedIndex].StartsWith("  [ SLOŽKA"))
                     {
                         foldersRemoved++;
                     }
-                    else if (SelectedPlaylist.Paths[selectedIndex].StartsWith("[KONEC"))
+                    else if (SelectedPlaylist.Paths[selectedIndex].StartsWith("  [ KONEC"))
                     {
                         foldersRemoved--;
                     }
@@ -320,19 +320,19 @@ namespace Media_Player
         private void btnUp_Click(object sender, RoutedEventArgs e)
         {
             if(SelectedPlaylist == null || lbFilenames.SelectedItem == null || lbFilenames.SelectedIndex == 0
-            || SelectedPlaylist.Paths[lbFilenames.SelectedIndex].StartsWith("[KONEC")) return;
+            || SelectedPlaylist.Paths[lbFilenames.SelectedIndex].StartsWith("  [ KONEC")) return;
             int selectedIndex = lbFilenames.SelectedIndex;
             int itemsCount = 1;
             int foldersMoved = 1;
-            if (SelectedPlaylist.Paths[selectedIndex].StartsWith("[SLOŽKA"))
+            if (SelectedPlaylist.Paths[selectedIndex].StartsWith("  [ SLOŽKA"))
             {
                 while (foldersMoved > 0)
                 {
-                    if (SelectedPlaylist.Paths[selectedIndex + itemsCount].StartsWith("[SLOŽKA"))
+                    if (SelectedPlaylist.Paths[selectedIndex + itemsCount].StartsWith("  [ SLOŽKA"))
                     {
                         foldersMoved++;
                     }
-                    else if (SelectedPlaylist.Paths[selectedIndex + itemsCount].StartsWith("[KONEC"))
+                    else if (SelectedPlaylist.Paths[selectedIndex + itemsCount].StartsWith("  [ KONEC"))
                     {
                         foldersMoved--;
                     }
@@ -347,20 +347,20 @@ namespace Media_Player
         private void BtnDown_Click(object sender, RoutedEventArgs e)
         {
             if (SelectedPlaylist == null || lbFilenames.SelectedItem == null 
-                || SelectedPlaylist.Paths[lbFilenames.SelectedIndex].StartsWith("[KONEC")
+                || SelectedPlaylist.Paths[lbFilenames.SelectedIndex].StartsWith("  [ KONEC")
                 || lbFilenames.SelectedIndex == lbFilenames.Items.Count - 1) return;
             int selectedIndex = lbFilenames.SelectedIndex;
             int itemsCount = 1;
             int foldersMoved = 1;
-            if (SelectedPlaylist.Paths[selectedIndex].StartsWith("[SLOŽKA"))
+            if (SelectedPlaylist.Paths[selectedIndex].StartsWith("  [ SLOŽKA"))
             {
                 while (foldersMoved > 0)
                 {
-                    if (SelectedPlaylist.Paths[selectedIndex + itemsCount].StartsWith("[SLOŽKA"))
+                    if (SelectedPlaylist.Paths[selectedIndex + itemsCount].StartsWith("  [ SLOŽKA"))
                     {
                         foldersMoved++;
                     }
-                    else if (SelectedPlaylist.Paths[selectedIndex + itemsCount].StartsWith("[KONEC"))
+                    else if (SelectedPlaylist.Paths[selectedIndex + itemsCount].StartsWith("  [ KONEC"))
                     {
                         foldersMoved--;
                     }
