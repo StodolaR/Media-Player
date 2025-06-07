@@ -72,7 +72,7 @@
                 </RadioButton>
                 
                 <Slider x:Name="slVolume" Width="70" DockPanel.Dock="Left" Maximum="1" Value="0.7" ValueChanged="SlVolume_ValueChanged"
-                        Foreground="DarkOrchid" Margin="3,8" ToolTip="Hlasitost"/>
+                        Foreground="DarkOrchid" Margin="3,8" IsMoveToPointEnabled="True" ToolTip="Hlasitost"/>
                 <Image Source="/Resources/Images/VolumeWhite.png" DockPanel.Dock="Left" Height="15"/>
                 <StackPanel x:Name="spSlideshow" Orientation="Horizontal" Visibility="Visible" HorizontalAlignment="Center" >
                     <Border CornerRadius="8,2,2,8" Margin="3" Style="{StaticResource textboxBorder}" Width="80">

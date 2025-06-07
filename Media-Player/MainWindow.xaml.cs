@@ -149,7 +149,7 @@ namespace Media_Player
         }
         private void SetCombinedFilename()
         {
-            tbFilename.Text = IOPath.GetFileName(mePlayer.Source.AbsolutePath) + "/" + IOPath.GetFileName(imPicture.Source.ToString());
+            tbFilename.Text = IOPath.GetFileName(mePlayer.Source.ToString()) + "/" + IOPath.GetFileName(imPicture.Source.ToString());
         }
         private void btnAudio_Checked(object sender, RoutedEventArgs e)
         {
