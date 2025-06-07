@@ -58,14 +58,7 @@ namespace Media_Player
                     if(lbPreviews.SelectedIndex < lbPreviews.Items.Count - 1)
                     {
                         lbPreviews.SelectedIndex++;
-                        if (mePlayer.Source != null)
-                        {
-                            SetCombinedFilename();
-                        }
-                        else
-                        {
-                            tbFilename.Text = IOPath.GetFileName((string)lbPreviews.SelectedItem);
-                        }
+                        CombineFilenames(IOPath.GetFileName((string)lbPreviews.SelectedItem));
                     }
                     else
                     {
@@ -106,14 +99,7 @@ namespace Media_Player
                         lbPreviews.ItemsSource = picturesPlaylist;
                         lbPreviews.Items.Refresh();
                         imPicture.Source = new BitmapImage(new Uri(ofd.FileName));
-                        if (mePlayer.Source != null)
-                        {
-                            SetCombinedFilename();
-                        }
-                        else
-                        {
-                            tbFilename.Text = IOPath.GetFileName(ofd.FileName);
-                        }
+                        CombineFilenames(IOPath.GetFileName(ofd.FileName));
                     }
                 }
             }
@@ -134,22 +120,22 @@ namespace Media_Player
             btnPause.IsChecked = false;
             btnPause.IsEnabled = true;
             mePlayer.Source = new Uri(mediaPlaylist[0]);
-            if (imPicture.Source != null)
-            {
-                SetCombinedFilename();
-            }
-            else
-            {
-                tbFilename.Text = System.IO.Path.GetFileName(fileName);
-            }
+            CombineFilenames(IOPath.GetFileName(fileName));
             playlistCounter = 0;
             slProgress.IsEnabled = true;
             slProgress.Value = 0;
             mePlayer.Play();
         }
-        private void SetCombinedFilename()
+        private void CombineFilenames(string fileName)
         {
-            tbFilename.Text = IOPath.GetFileName(mePlayer.Source.ToString()) + "/" + IOPath.GetFileName(imPicture.Source.ToString());
+            if (imPicture.Source != null && mePlayer.Source != null)
+            {
+                tbFilename.Text = IOPath.GetFileName(mePlayer.Source.ToString()) + "/" + IOPath.GetFileName(imPicture.Source.ToString());
+            }
+            else
+            {
+                tbFilename.Text = fileName;
+            }
         }
         private void btnAudio_Checked(object sender, RoutedEventArgs e)
         {
@@ -242,14 +228,7 @@ namespace Media_Player
                             lbPreviews.Visibility = Visibility.Collapsed;
                         }
                         imPicture.Source = new BitmapImage(new Uri(picturesPlaylist[0]));
-                        if (mePlayer.Source != null)
-                        {
-                            SetCombinedFilename();
-                        }
-                        else
-                        {
-                            tbFilename.Text = IOPath.GetFileName(picturesPlaylist[0]);
-                        }
+                        CombineFilenames(IOPath.GetFileName(picturesPlaylist[0]));
                     }
                     else
                     {
@@ -274,14 +253,7 @@ namespace Media_Player
             if ((playlistCounter) == mediaPlaylist.Count -1) return;
             mePlayer.Source = new Uri(mediaPlaylist[++playlistCounter]);
             slProgress.Value = 0;
-            if (imPicture.Source != null)
-            {
-                SetCombinedFilename();
-            }
-            else
-            {
-                tbFilename.Text = IOPath.GetFileName(mediaPlaylist[playlistCounter]);
-            }
+            CombineFilenames(IOPath.GetFileName(mediaPlaylist[playlistCounter]));
         }
 
         private void BtnLast_Click(object sender, RoutedEventArgs e)
@@ -305,14 +277,7 @@ namespace Media_Player
             if (lbPreviews.SelectedItem != null)
             {
                 imPicture.Source = new BitmapImage(new Uri((string)lbPreviews.SelectedItem));
-                if (mePlayer.Source != null)
-                {
-                    SetCombinedFilename();
-                }
-                else
-                {
-                    tbFilename.Text = IOPath.GetFileName((string)lbPreviews.SelectedItem);
-                }
+                CombineFilenames(IOPath.GetFileName((string)lbPreviews.SelectedItem));
             }
         }
 
