@@ -267,7 +267,8 @@ namespace Media_Player
             {
                 mePlayer.Position = TimeSpan.FromSeconds(slProgress.Value);
             }
-            tbProgressTime.Text = TimeSpan.FromSeconds(slProgress.Value).ToString(@"h\:mm\:ss") + "/" + TimeSpan.FromSeconds(slProgress.Maximum).ToString(@"h\:mm\:ss");
+            tbProgressTime.Text = TimeSpan.FromSeconds(slProgress.Value).ToString(@"h\:mm\:ss") + "/" 
+                                + TimeSpan.FromSeconds(slProgress.Maximum).ToString(@"h\:mm\:ss");
         }
 
         private void SlVolume_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -310,7 +311,6 @@ namespace Media_Player
 
         private void BtnSlideshow_Click(object sender, RoutedEventArgs e)
         {
-            
             if (btnSlideshow.IsChecked !=null && btnSlideshow.IsChecked == true)
             {
                 if (int.TryParse(tbxDelay.Text, out slideshowInterval))
@@ -320,8 +320,9 @@ namespace Media_Player
                 else
                 {
                     tbxDelay.IsEnabled = true;
-                    btnSlideshow.IsEnabled = false;
+                    btnSlideshow.IsChecked = false;
                     slideshowInterval = 0;
+                    tbxDelay.Text = "5";
                 }
             }
             else
