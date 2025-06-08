@@ -79,9 +79,8 @@ namespace Media_Player
 
         private void btnVideo_Checked(object sender, RoutedEventArgs e)
         {
-            spSlideshow.Visibility = Visibility.Collapsed;
+            PicturesPreviewReset();
             picturesPlaylist.Clear();
-            lbPreviews.Items.Refresh();
             imPicture.Source = null;
             MediaChangeReset();
         }
@@ -97,6 +96,15 @@ namespace Media_Player
             mediaPlaylist.Clear();
             tbProgressTime.Text = "0:00:00/0:00:00";
             tbFilename.Text = "Název souboru";
+        }
+
+        private void PicturesPreviewReset()
+        {
+            countdown = slideshowInterval = 0;
+            btnSlideshow.IsChecked = false;
+            spSlideshow.Visibility = Visibility.Collapsed;
+            lbPreviews.ItemsSource = new List<string>();
+            lbPreviews.Visibility = Visibility.Collapsed;
         }
 
         private void BtnOpen_Click(object sender, RoutedEventArgs e)
@@ -124,8 +132,7 @@ namespace Media_Player
                     else
                     {
                         picturesPlaylist.Clear();
-                        lbPreviews.ItemsSource = picturesPlaylist;
-                        lbPreviews.Items.Refresh();
+                        PicturesPreviewReset();
                         imPicture.Source = new BitmapImage(new Uri(ofd.FileName));
                         CombineFilenames(IOPath.GetFileName(ofd.FileName));
                     }
@@ -155,8 +162,7 @@ namespace Media_Player
                         }
                         else
                         {
-                            spSlideshow.Visibility = Visibility.Collapsed;
-                            lbPreviews.Visibility = Visibility.Collapsed;
+                            PicturesPreviewReset();
                         }
                         imPicture.Source = new BitmapImage(new Uri(picturesPlaylist[0]));
                         CombineFilenames(IOPath.GetFileName(picturesPlaylist[0]));
