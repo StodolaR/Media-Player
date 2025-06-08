@@ -200,7 +200,7 @@ namespace Media_Player
         {
             btnPause.IsChecked = false;
             btnPause.IsEnabled = true;
-            mePlayer.Source = new Uri(mediaPlaylist[0]);
+            mePlayer.Source = new Uri(fileName);
             CombineFilenames(IOPath.GetFileName(fileName));
             playlistIndex = 0;
             slProgress.IsEnabled = true;

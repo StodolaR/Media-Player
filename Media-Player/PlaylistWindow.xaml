@@ -18,8 +18,8 @@
                     <Button x:Name="btnRename" Content="Přejmenuj" Click="BtnRename_Click" ToolTip="Přejmenování vybraného playlistu"/>
                     <Popup x:Name="popNewName" Placement="Bottom" PlacementTarget="{Binding ElementName=btnNew}">
                         <StackPanel>
-                            <TextBlock Text="Zadej název playlistu:" Background="White"/>
-                            <TextBox x:Name="tbNewName" Width="250"/>
+                            <TextBlock x:Name="tbPopupTitle" Background="White"/>
+                            <TextBox x:Name="tbxNewName" Width="250"/>
                             <TextBlock x:Name="tbNameExist" Background="White" Text="Název již existuje, zvolte jiný" Visibility="Collapsed"/>
                             <StackPanel Orientation="Horizontal">
                                 <Button x:Name="btnOk" Content="Potvrď" Click="BtnOk_Click" Width="125" IsDefault="True"/>
