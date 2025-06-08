@@ -58,12 +58,12 @@ namespace Media_Player
                     if(lbPreviews.SelectedIndex < lbPreviews.Items.Count - 1)
                     {
                         lbPreviews.SelectedIndex++;
-                        CombineFilenames(IOPath.GetFileName((string)lbPreviews.SelectedItem));
                     }
                     else
                     {
                         countdown = slideshowInterval = 0;
                         btnSlideshow.IsChecked = false;
+                        tbxDelay.IsEnabled = true;
                         return;
                     }
                 }
@@ -95,7 +95,7 @@ namespace Media_Player
             playlistIndex = 0;
             mediaPlaylist.Clear();
             tbProgressTime.Text = "0:00:00/0:00:00";
-            tbFilename.Text = "Název souboru";
+            CombineFilenames("");
         }
 
         private void PicturesPreviewReset()
@@ -105,6 +105,7 @@ namespace Media_Player
             spSlideshow.Visibility = Visibility.Collapsed;
             lbPreviews.ItemsSource = new List<string>();
             lbPreviews.Visibility = Visibility.Collapsed;
+            CombineFilenames("");
         }
 
         private void BtnOpen_Click(object sender, RoutedEventArgs e)
@@ -163,7 +164,7 @@ namespace Media_Player
                         {
                             PicturesPreviewReset();
                         }
-                        if (picturesPlaylist.Count > 0)
+                        if (picturesPlaylist.Count == 1)
                         {
                             TryShowPicture(picturesPlaylist[0]);
                         }
@@ -183,15 +184,74 @@ namespace Media_Player
 
         private void TryShowPicture(string picturePath)
         {
-            imPicture.Source = new BitmapImage(new Uri(picturePath));
-            CombineFilenames(IOPath.GetFileName(picturePath));
+            MessageBoxResult result;
+            bool sourceAssigned = false;
+            string errorMessage = string.Empty;
+            if (File.Exists(picturePath))
+            {
+                try
+                {
+                    imPicture.Source = new BitmapImage(new Uri(picturePath));
+                    CombineFilenames(IOPath.GetFileName(picturePath));
+                    sourceAssigned = true;
+                }
+                catch
+                {
+                    errorMessage = $"Položka {picturePath} nelze spustit." + Environment.NewLine + "Přejete si pokračovat?";
+                } 
+            }
+            else
+            {
+                errorMessage = $"Položka {picturePath} nenalezena" + Environment.NewLine + "Přejete si pokračovat?";
+            }
+            if(!sourceAssigned)
+            {
+                result = MessageBox.Show(errorMessage, "Chyba spuštění", MessageBoxButton.YesNo);
+                switch(result)
+                {
+                    case MessageBoxResult.Yes: if (lbPreviews.SelectedItem != null && lbPreviews.SelectedIndex < lbPreviews.Items.Count - 1)
+                                                   lbPreviews.SelectedIndex += 1; break;
+
+                    case MessageBoxResult.No: imPicture.Source = null;
+                                              PicturesPreviewReset(); break;
+                }
+            }
         }
 
         private void TryPlayMedia(string mediaPath)
         {
-            mePlayer.Source = new Uri(mediaPath);
-            slProgress.Value = 0;
-            CombineFilenames(IOPath.GetFileName(mediaPath));
+            MessageBoxResult result;
+            bool sourceAssigned = false;
+            string errorMessage = string.Empty;
+            if (File.Exists(mediaPath))
+            {
+                try
+                {
+                    mePlayer.Source = new Uri(mediaPath);
+                    CombineFilenames(IOPath.GetFileName(mediaPath));
+                    slProgress.Value = 0;
+                    sourceAssigned = true;
+                }
+                catch
+                {
+                    errorMessage = $"Položka {mediaPath} nelze spustit." + Environment.NewLine + "Přejete si pokračovat?";
+                }
+            }
+            else
+            {
+                errorMessage = $"Položka {mediaPath} nenalezena" + Environment.NewLine + "Přejete si pokračovat?";
+            }
+            if (!sourceAssigned)
+            {
+                result = MessageBox.Show(errorMessage, "Chyba spuštění", MessageBoxButton.YesNo);
+                switch (result)
+                {
+                    case MessageBoxResult.Yes: ChangePlaylistItem(mediaPlaylist.Count - 1, 1); break;
+                    case MessageBoxResult.No:
+                        mePlayer.Source = null;
+                        MediaChangeReset(); break;
+                }
+            }
         }
 
         private void PlaylistWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
@@ -228,6 +288,10 @@ namespace Media_Player
             if (imPicture.Source != null && mePlayer.Source != null)
             {
                 tbFilename.Text = IOPath.GetFileName(mePlayer.Source.ToString()) + "/" + IOPath.GetFileName(imPicture.Source.ToString());
+            }
+            else if (imPicture.Source == null && mePlayer.Source == null)
+            {
+                tbFilename.Text = "Název souboru";
             }
             else
             {
