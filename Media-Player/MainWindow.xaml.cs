@@ -133,8 +133,7 @@ namespace Media_Player
                     {
                         picturesPlaylist.Clear();
                         PicturesPreviewReset();
-                        imPicture.Source = new BitmapImage(new Uri(ofd.FileName));
-                        CombineFilenames(IOPath.GetFileName(ofd.FileName));
+                        TryShowPicture(ofd.FileName);
                     }
                 }
             }
@@ -166,8 +165,7 @@ namespace Media_Player
                         }
                         if (picturesPlaylist.Count > 0)
                         {
-                            imPicture.Source = new BitmapImage(new Uri(picturesPlaylist[0]));
-                            CombineFilenames(IOPath.GetFileName(picturesPlaylist[0]));
+                            TryShowPicture(picturesPlaylist[0]);
                         }
                     }
                     else
@@ -181,6 +179,19 @@ namespace Media_Player
                     }
                 }
             }
+        }
+
+        private void TryShowPicture(string picturePath)
+        {
+            imPicture.Source = new BitmapImage(new Uri(picturePath));
+            CombineFilenames(IOPath.GetFileName(picturePath));
+        }
+
+        private void TryPlayMedia(string mediaPath)
+        {
+            mePlayer.Source = new Uri(mediaPath);
+            slProgress.Value = 0;
+            CombineFilenames(IOPath.GetFileName(mediaPath));
         }
 
         private void PlaylistWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
@@ -202,15 +213,14 @@ namespace Media_Player
             filterString = filterString.Trim(';');
             return filterString + "|" + filterString;
         }
+
         private void SetPanelAndPlay(string fileName)
         {
             btnPause.IsChecked = false;
             btnPause.IsEnabled = true;
-            mePlayer.Source = new Uri(fileName);
-            CombineFilenames(IOPath.GetFileName(fileName));
+            TryPlayMedia(fileName);
             playlistIndex = 0;
             slProgress.IsEnabled = true;
-            slProgress.Value = 0;
             mePlayer.Play();
         }
         private void CombineFilenames(string fileName)
@@ -251,9 +261,7 @@ namespace Media_Player
         {
             if ((playlistIndex) == limitPosition) return;
             playlistIndex += increment;
-            mePlayer.Source = new Uri(mediaPlaylist[playlistIndex]);
-            slProgress.Value = 0;
-            CombineFilenames(IOPath.GetFileName(mediaPlaylist[playlistIndex]));
+            TryPlayMedia(mediaPlaylist[playlistIndex]);
         }
 
         private void SlProgress_DragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e)
@@ -286,8 +294,7 @@ namespace Media_Player
         {
             if (lbPreviews.SelectedItem != null)
             {
-                imPicture.Source = new BitmapImage(new Uri((string)lbPreviews.SelectedItem));
-                CombineFilenames(IOPath.GetFileName((string)lbPreviews.SelectedItem));
+                TryShowPicture((string)lbPreviews.SelectedItem);
             }
         }
 
