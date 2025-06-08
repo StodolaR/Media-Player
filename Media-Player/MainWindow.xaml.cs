@@ -164,14 +164,20 @@ namespace Media_Player
                         {
                             PicturesPreviewReset();
                         }
-                        imPicture.Source = new BitmapImage(new Uri(picturesPlaylist[0]));
-                        CombineFilenames(IOPath.GetFileName(picturesPlaylist[0]));
+                        if (picturesPlaylist.Count > 0)
+                        {
+                            imPicture.Source = new BitmapImage(new Uri(picturesPlaylist[0]));
+                            CombineFilenames(IOPath.GetFileName(picturesPlaylist[0]));
+                        }
                     }
                     else
                     {
                         playlistWindow.FinalResult.Remove(playlistWindow.FinalResult.Last());
                         mediaPlaylist = playlistWindow.FinalResult;
-                        SetPanelAndPlay(mediaPlaylist[0]);
+                        if (mediaPlaylist.Count > 0)
+                        {
+                            SetPanelAndPlay(mediaPlaylist[0]);
+                        }
                     }
                 }
             }
