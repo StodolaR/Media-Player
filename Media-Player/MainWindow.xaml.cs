@@ -29,7 +29,7 @@ namespace Media_Player
         private List<string> mediaPlaylist;
         private List<string> picturesPlaylist;
         public const string videoExtensions = "mov;mp4;avi;wmv";
-        public const string audioExtensions = "mp3";
+        public const string audioExtensions = "mp3"; // přípona použita jako podmínka v metodě BtnOpen_Click !
         public const string pictureExtensions = "jpg;png;gif;tif;bmp";
         public MainWindow()
         {
@@ -71,6 +71,34 @@ namespace Media_Player
             }
         }
 
+        private void btnAudio_Checked(object sender, RoutedEventArgs e)
+        {
+            if (mediaPlaylist == null) return;
+            MediaChangeReset();
+        }
+
+        private void btnVideo_Checked(object sender, RoutedEventArgs e)
+        {
+            spSlideshow.Visibility = Visibility.Collapsed;
+            picturesPlaylist.Clear();
+            lbPreviews.Items.Refresh();
+            imPicture.Source = null;
+            MediaChangeReset();
+        }
+
+        private void MediaChangeReset()
+        {
+            mePlayer.Source = null;
+            btnPause.IsChecked = false;
+            btnPause.IsEnabled = false;
+            slProgress.Value = 0;
+            slProgress.IsEnabled = false;
+            playlistIndex = 0;
+            mediaPlaylist.Clear();
+            tbProgressTime.Text = "0:00:00/0:00:00";
+            tbFilename.Text = "Název souboru";
+        }
+
         private void BtnOpen_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
@@ -104,6 +132,53 @@ namespace Media_Player
                 }
             }
         }
+
+        private void BtnPlaylist_Click(object sender, RoutedEventArgs e)
+        {
+            if (btnVideo.IsChecked != null)
+            {
+                PlaylistWindow playlistWindow = new PlaylistWindow((bool)btnVideo.IsChecked);
+                playlistWindow.Closing += PlaylistWindow_Closing;
+                if (playlistWindow.ShowDialog() == true)
+                {
+                    if (playlistWindow.FinalResult.Last() == "(obrázky)")
+                    {
+                        playlistWindow.FinalResult.Remove(playlistWindow.FinalResult.Last());
+                        picturesPlaylist = playlistWindow.FinalResult;
+                        if (picturesPlaylist.Count > 1)
+                        {
+                            spSlideshow.Visibility = Visibility.Visible;
+                            lbPreviews.ItemsSource = picturesPlaylist;
+                            lbPreviews.SelectedIndex = 0;
+                            lbPreviews.Visibility = Visibility.Visible;
+                            tbPicturesCount.Text = picturesPlaylist.Count + "x ";
+                        }
+                        else
+                        {
+                            spSlideshow.Visibility = Visibility.Collapsed;
+                            lbPreviews.Visibility = Visibility.Collapsed;
+                        }
+                        imPicture.Source = new BitmapImage(new Uri(picturesPlaylist[0]));
+                        CombineFilenames(IOPath.GetFileName(picturesPlaylist[0]));
+                    }
+                    else
+                    {
+                        playlistWindow.FinalResult.Remove(playlistWindow.FinalResult.Last());
+                        mediaPlaylist = playlistWindow.FinalResult;
+                        SetPanelAndPlay(mediaPlaylist[0]);
+                    }
+                }
+            }
+        }
+
+        private void PlaylistWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (sender != null)
+            {
+                ((PlaylistWindow)sender).SerializePlaylists();
+            }
+        }
+
         public static string GetFilterString(string extensions)
         {
             string[] extensionsArray = extensions.Split(';');
@@ -137,33 +212,6 @@ namespace Media_Player
                 tbFilename.Text = fileName;
             }
         }
-        private void btnAudio_Checked(object sender, RoutedEventArgs e)
-        {
-            if (mediaPlaylist == null) return;
-            MediaChangeReset();
-        }
-
-        private void btnVideo_Checked(object sender, RoutedEventArgs e)
-        {
-            spSlideshow.Visibility = Visibility.Collapsed;
-            picturesPlaylist.Clear();
-            lbPreviews.Items.Refresh();
-            imPicture.Source = null;
-            MediaChangeReset();
-        }
-        private void MediaChangeReset()
-        {
-            mePlayer.Source = null;
-            btnPause.IsChecked = false;
-            btnPause.IsEnabled = false;
-            slProgress.Value = 0;
-            slProgress.IsEnabled = false;
-            playlistIndex = 0;
-            mediaPlaylist.Clear();
-            tbProgressTime.Text = "0:00:00/0:00:00";
-            tbFilename.Text = "Nazev souboru";
-            
-        }
 
         private void BtnPause_Checked(object sender, RoutedEventArgs e)
         {
@@ -177,9 +225,23 @@ namespace Media_Player
             mePlayer.Play();
         }
 
-        private void SlVolume_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        private void NextPlaylistItem(object sender, RoutedEventArgs e)
         {
-            mePlayer.Volume = slVolume.Value;
+            ChangePlaylistItem(mediaPlaylist.Count - 1, 1);
+        }
+
+        private void LastPlaylistItem(object sender, RoutedEventArgs e)
+        {
+            ChangePlaylistItem(0, -1);
+        }
+
+        private void ChangePlaylistItem(int limitPosition, int increment)
+        {
+            if ((playlistIndex) == limitPosition) return;
+            playlistIndex += increment;
+            mePlayer.Source = new Uri(mediaPlaylist[playlistIndex]);
+            slProgress.Value = 0;
+            CombineFilenames(IOPath.GetFileName(mediaPlaylist[playlistIndex]));
         }
 
         private void SlProgress_DragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e)
@@ -202,69 +264,9 @@ namespace Media_Player
             tbProgressTime.Text = TimeSpan.FromSeconds(slProgress.Value).ToString(@"h\:mm\:ss") + "/" + TimeSpan.FromSeconds(slProgress.Maximum).ToString(@"h\:mm\:ss");
         }
 
-        private void BtnPlaylist_Click(object sender, RoutedEventArgs e)
+        private void SlVolume_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if (btnVideo.IsChecked != null)
-            {
-                PlaylistWindow playlistWindow = new PlaylistWindow((bool)btnVideo.IsChecked);
-                playlistWindow.Closing += PlaylistWindow_Closing;
-                if (playlistWindow.ShowDialog() == true)
-                {
-                    if(playlistWindow.FinalResult.Last() == "(obrázky)")
-                    {
-                        playlistWindow.FinalResult.Remove(playlistWindow.FinalResult.Last());
-                        picturesPlaylist = playlistWindow.FinalResult;
-                        if(picturesPlaylist.Count > 1)
-                        {
-                            spSlideshow.Visibility = Visibility.Visible;
-                            lbPreviews.ItemsSource = picturesPlaylist;
-                            lbPreviews.SelectedIndex = 0;
-                            lbPreviews.Visibility = Visibility.Visible;
-                            tbPicturesCount.Text = picturesPlaylist.Count + "x "; 
-                        }
-                        else
-                        {
-                            spSlideshow.Visibility = Visibility.Collapsed;
-                            lbPreviews.Visibility = Visibility.Collapsed;
-                        }
-                        imPicture.Source = new BitmapImage(new Uri(picturesPlaylist[0]));
-                        CombineFilenames(IOPath.GetFileName(picturesPlaylist[0]));
-                    }
-                    else
-                    {
-                        playlistWindow.FinalResult.Remove(playlistWindow.FinalResult.Last());
-                        mediaPlaylist = playlistWindow.FinalResult;
-                        SetPanelAndPlay(mediaPlaylist[0]);
-                    }
-                }
-            }  
-        }
-
-        private void PlaylistWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
-        {
-            if (sender != null)
-            {
-                ((PlaylistWindow)sender).SerializePlaylists();
-            }
-        }
-
-        private void NextPlaylistItem(object sender, RoutedEventArgs e)
-        {
-            ChangePlaylistItem(mediaPlaylist.Count - 1, 1);
-        }
-
-        private void LastPlaylistItem(object sender, RoutedEventArgs e)
-        {
-            ChangePlaylistItem(0, -1);
-        }
-
-        private void ChangePlaylistItem(int limitPosition, int increment)
-        {
-            if ((playlistIndex) == limitPosition) return;
-            playlistIndex += increment;
-            mePlayer.Source = new Uri(mediaPlaylist[playlistIndex]);
-            slProgress.Value = 0;
-            CombineFilenames(IOPath.GetFileName(mediaPlaylist[playlistIndex]));
+            mePlayer.Volume = slVolume.Value;
         }
 
         private void LbPreviews_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -285,6 +287,19 @@ namespace Media_Player
             }
             Regex delay = new Regex("[^1-9]");
             e.Handled = delay.IsMatch(e.Text);
+        }
+
+        private void tbxDelay_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            tbxDelay.Text = string.Empty;
+        }
+
+        private void tbxDelay_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            if (tbxDelay.Text == string.Empty)
+            {
+                tbxDelay.Text = "5";
+            }
         }
 
         private void BtnSlideshow_Click(object sender, RoutedEventArgs e)
@@ -315,19 +330,6 @@ namespace Media_Player
             Visibility backupVisibility = dpControlPanel.Visibility;
             dpControlPanel.Visibility = btnShowPanel.Visibility;
             btnShowPanel.Visibility = backupVisibility;
-        }
-
-        private void tbxDelay_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
-        {
-            tbxDelay.Text = string.Empty;
-        }
-
-        private void tbxDelay_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
-        {
-            if(tbxDelay.Text == string.Empty)
-            {
-                tbxDelay.Text = "5";
-            }
         }
     }
 }
