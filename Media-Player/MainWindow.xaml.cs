@@ -27,7 +27,6 @@ namespace Media_Player
         private bool positionAdjustment;
         private int playlistIndex;
         private List<string> mediaPlaylist;
-        private List<string> picturesPlaylist;
         public const string videoExtensions = "mov;mp4;avi;wmv";
         public const string audioExtensions = "mp3"; // přípona použita jako podmínka v metodě BtnOpen_Click !
         public const string pictureExtensions = "jpg;png;gif;tif;bmp";
@@ -35,7 +34,6 @@ namespace Media_Player
         {
             InitializeComponent();
             mediaPlaylist = new List<string>();
-            picturesPlaylist = new List<string>();
             mePlayer.Volume = slVolume.Value;
             DispatcherTimer timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(1);
@@ -85,7 +83,7 @@ namespace Media_Player
         private void btnVideo_Checked(object sender, RoutedEventArgs e)
         {
             PicturesPreviewReset();
-            picturesPlaylist.Clear();
+            lbPreviews.Items.Clear();
             imPicture.Source = null;
             MediaChangeReset();
         }
@@ -107,7 +105,7 @@ namespace Media_Player
         {
             StopSlideshow();
             spSlideshow.Visibility = Visibility.Collapsed;
-            lbPreviews.ItemsSource = new List<string>();
+            lbPreviews.Items.Clear();
             lbPreviews.Visibility = Visibility.Collapsed;
             CombineFilenames("");
         }
@@ -136,7 +134,7 @@ namespace Media_Player
                     }
                     else
                     {
-                        picturesPlaylist.Clear();
+                        lbPreviews.Items.Clear();
                         PicturesPreviewReset();
                         TryShowPicture(ofd.FileName);
                     }
@@ -155,22 +153,24 @@ namespace Media_Player
                     if (playlistWindow.FinalResult.Last() == "(obrázky)")
                     {
                         playlistWindow.FinalResult.Remove(playlistWindow.FinalResult.Last());
-                        picturesPlaylist = playlistWindow.FinalResult;
-                        if (picturesPlaylist.Count > 1)
+                        foreach (var item in playlistWindow.FinalResult)
+                        {
+                            lbPreviews.Items.Add(item);
+                        }
+                        if (lbPreviews.Items.Count > 1)
                         {
                             spSlideshow.Visibility = Visibility.Visible;
-                            lbPreviews.ItemsSource = picturesPlaylist;
                             lbPreviews.SelectedIndex = 0;
                             lbPreviews.Visibility = Visibility.Visible;
-                            tbPicturesCount.Text = picturesPlaylist.Count + "x ";
+                            tbPicturesCount.Text = lbPreviews.Items.Count + "x ";
                         }
                         else
                         {
                             PicturesPreviewReset();
                         }
-                        if (picturesPlaylist.Count == 1)
+                        if (lbPreviews.Items.Count == 1)
                         {
-                            TryShowPicture(picturesPlaylist[0]);
+                            TryShowPicture((string)lbPreviews.Items[0]);
                         }
                     }
                     else
