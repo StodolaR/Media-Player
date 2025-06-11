@@ -14,9 +14,9 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
                 <StackPanel Orientation="Horizontal" Width="250">
-                    <Button x:Name="btnNew" Content="Nový" Click="BtnNew_Click" ToolTip="Vytvoření nového playlistu"/>
-                    <Button x:Name="btnRename" Content="Přejmenuj" Click="BtnRename_Click" ToolTip="Přejmenování vybraného playlistu"/>
-                    <Popup x:Name="popNewName" Placement="Bottom" PlacementTarget="{Binding ElementName=btnNew}">
+                    <Button x:Name="btnNew" Content="Nový" Click="PlaylistsButtonsClick" ToolTip="Vytvoření nového playlistu"/>
+                    <Button x:Name="btnRename" Content="Přejmenuj" Click="PlaylistsButtonsClick" ToolTip="Přejmenování vybraného playlistu"/>
+                    <Popup x:Name="popNewNameOrRemove" Placement="Bottom" PlacementTarget="{Binding ElementName=btnNew}">
                         <StackPanel>
                             <TextBlock x:Name="tbPopupTitle" Background="White"/>
                             <TextBox x:Name="tbxNewName" Width="250"/>
@@ -27,7 +27,7 @@
                             </StackPanel>
                         </StackPanel>
                     </Popup>
-                    <Button x:Name="btnRemove" Content="Smaž" Click="BtnRemove_Click" ToolTip="Odstranění playlistu"/>
+                    <Button x:Name="btnRemove" Content="Smaž" Click="PlaylistsButtonsClick" ToolTip="Odstranění playlistu"/>
                     <ToggleButton x:Name="btnPictures" Content="Audio/obrázky" Click="BtnPictures_Click" ToolTip="Přepnutí mezi playlisty s audiem nebo s obrázky"/>
                 </StackPanel>
                 <WrapPanel>

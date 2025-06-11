@@ -118,41 +118,29 @@ namespace Media_Player
             return allPlaylists.picturePlaylists;
         }
 
-        private void BtnNew_Click(object sender, RoutedEventArgs e)
-        {
-            tbPopupTitle.Text = "Zadej název playlistu:";
-            tbxNewName.Visibility = Visibility.Visible;
-            popNewName.IsOpen = true;
-            popNewName.Tag = "New";
-            tbxNewName.Focus();
-        }
+        
 
-        private void BtnRename_Click(object sender, RoutedEventArgs e)
+        private void PlaylistsButtonsClick(object sender, RoutedEventArgs e)
         {
-            if (SelectedPlaylist != null)
-            {
-                tbPopupTitle.Text = "Zadej nový název playlistu:";
-                tbxNewName.Visibility = Visibility.Visible;
-                popNewName.IsOpen = true;
-                popNewName.Tag = "Rename";
-                tbxNewName.Focus();
-            }
-        }
-
-        private void BtnRemove_Click(object sender, RoutedEventArgs e)
-        {
-            if (SelectedPlaylist != null)
+            popNewNameOrRemove.Tag = ((Button)sender).Name.Substring(3);
+            if (SelectedPlaylist == null && (string)popNewNameOrRemove.Tag != "New") return;
+            if ((string)popNewNameOrRemove.Tag == "Remove" && SelectedPlaylist != null)
             {
                 tbPopupTitle.Text = "Přejete si odstranit playlist: " + Environment.NewLine + " " + SelectedPlaylist.Name + " ?";
                 tbxNewName.Visibility = Visibility.Collapsed;
-                popNewName.IsOpen = true;
-                popNewName.Tag = "Remove";
             }
+            else
+            {
+                tbPopupTitle.Text = "Zadej název playlistu:";
+                tbxNewName.Visibility = Visibility.Visible;
+            }
+            popNewNameOrRemove.IsOpen = true;
+            tbxNewName.Focus();
         }
 
         private void BtnOk_Click(object sender, RoutedEventArgs e)
         {
-            if ((string)popNewName.Tag == "Remove" && SelectedPlaylist != null)
+            if ((string)popNewNameOrRemove.Tag == "Remove" && SelectedPlaylist != null)
             {
                 ActualPlaylists.Remove(SelectedPlaylist);
             }
@@ -164,26 +152,26 @@ namespace Media_Player
                     return;
                 }
                 tbNameExist.Visibility = Visibility.Collapsed;
-                if((string)popNewName.Tag == "New")
+                if((string)popNewNameOrRemove.Tag == "New")
                 {
                     Playlist newPlaylist = new Playlist(tbxNewName.Text);
                     ActualPlaylists.Add(newPlaylist);
                     SelectedPlaylist = newPlaylist;
                 }
-                else if ((string)popNewName.Tag == "Rename" && SelectedPlaylist != null)
+                else if ((string)popNewNameOrRemove.Tag == "Rename" && SelectedPlaylist != null)
                 {
                     SelectedPlaylist.Name = tbxNewName.Text;
                 }
             }
             tbxNewName.Text = string.Empty;
-            popNewName.IsOpen = false;
+            popNewNameOrRemove.IsOpen = false;
         }
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
             tbNameExist.Visibility = Visibility.Collapsed;
             tbxNewName.Text = string.Empty;
-            popNewName.IsOpen = false;
+            popNewNameOrRemove.IsOpen = false;
         }
 
         private void BtnPictures_Click(object sender, RoutedEventArgs e)

@@ -61,14 +61,19 @@ namespace Media_Player
                     }
                     else
                     {
-                        countdown = slideshowInterval = 0;
-                        btnSlideshow.IsChecked = false;
-                        tbxDelay.IsEnabled = true;
+                        StopSlideshow();
                         return;
                     }
                 }
                 countdown--;
             }
+        }
+
+        private void StopSlideshow()
+        {
+            countdown = slideshowInterval = 0;
+            btnSlideshow.IsChecked = false;
+            tbxDelay.IsEnabled = true;
         }
 
         private void btnAudio_Checked(object sender, RoutedEventArgs e)
@@ -100,8 +105,7 @@ namespace Media_Player
 
         private void PicturesPreviewReset()
         {
-            countdown = slideshowInterval = 0;
-            btnSlideshow.IsChecked = false;
+            StopSlideshow();
             spSlideshow.Visibility = Visibility.Collapsed;
             lbPreviews.ItemsSource = new List<string>();
             lbPreviews.Visibility = Visibility.Collapsed;
@@ -184,36 +188,42 @@ namespace Media_Player
 
         private void TryShowPicture(string picturePath)
         {
-            MessageBoxResult result;
-            bool sourceAssigned = false;
-            string errorMessage = string.Empty;
-            if (File.Exists(picturePath))
+            MessageBoxResult result = 0;
+            try
             {
-                try
+                if (!File.Exists(picturePath))
                 {
-                    imPicture.Source = new BitmapImage(new Uri(picturePath));
-                    CombineFilenames(IOPath.GetFileName(picturePath));
-                    sourceAssigned = true;
+                    throw new FileNotFoundException(picturePath);
                 }
-                catch
-                {
-                    errorMessage = $"Položka {picturePath} nelze spustit." + Environment.NewLine + "Přejete si pokračovat?";
-                } 
+                imPicture.Source = new BitmapImage(new Uri(picturePath));
+                CombineFilenames(IOPath.GetFileName(picturePath));
             }
-            else
+            catch
             {
-                errorMessage = $"Položka {picturePath} nenalezena" + Environment.NewLine + "Přejete si pokračovat?";
-            }
-            if(!sourceAssigned)
-            {
-                result = MessageBox.Show(errorMessage, "Chyba spuštění", MessageBoxButton.YesNo);
-                switch(result)
+                if (result == 0)
                 {
-                    case MessageBoxResult.Yes: if (lbPreviews.SelectedItem != null && lbPreviews.SelectedIndex < lbPreviews.Items.Count - 1)
-                                                   lbPreviews.SelectedIndex += 1; break;
-
-                    case MessageBoxResult.No: imPicture.Source = null;
-                                              PicturesPreviewReset(); break;
+                    if (lbPreviews.SelectedItem != null && lbPreviews.SelectedIndex < lbPreviews.Items.Count - 1)
+                    {
+                        result = MessageBox.Show("Některé z položek Playlistu nenalezeny či je nelze spustit..." + Environment.NewLine
+                                             + $"Od: {picturePath}" + Environment.NewLine + "Přejete si pokračovat?",
+                                             "Chyba spuštění", MessageBoxButton.YesNo);
+                    }
+                    else
+                    {
+                        MessageBox.Show($"Položka {picturePath} nenalezena či nelze spustit...");
+                        return;
+                    }
+                }
+                switch (result)
+                {
+                    case MessageBoxResult.Yes:
+                        int tempIndex = lbPreviews.SelectedIndex;
+                        lbPreviews.Items.Remove(lbPreviews.SelectedItem);
+                        lbPreviews.SelectedIndex = tempIndex;
+                        picturePath = (string)lbPreviews.SelectedItem; break;
+                    case MessageBoxResult.No:
+                        imPicture.Source = null;
+                        PicturesPreviewReset(); return;
                 }
             }
         }
