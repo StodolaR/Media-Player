@@ -27,6 +27,7 @@ namespace Media_Player
         private bool positionAdjustment;
         private int playlistIndex;
         private List<string> mediaPlaylist;
+        MessageBoxResult continueAfterError = 0;
         public const string videoExtensions = "mov;mp4;avi;wmv";
         public const string audioExtensions = "mp3"; // přípona použita jako podmínka v metodě BtnOpen_Click !
         public const string pictureExtensions = "jpg;png;gif;tif;bmp";
@@ -82,8 +83,7 @@ namespace Media_Player
 
         private void btnVideo_Checked(object sender, RoutedEventArgs e)
         {
-            PicturesPreviewReset();
-            lbPreviews.Items.Clear();
+            PicturesPreviewReset();;
             imPicture.Source = null;
             MediaChangeReset();
         }
@@ -134,7 +134,6 @@ namespace Media_Player
                     }
                     else
                     {
-                        lbPreviews.Items.Clear();
                         PicturesPreviewReset();
                         TryShowPicture(ofd.FileName);
                     }
@@ -144,6 +143,7 @@ namespace Media_Player
 
         private void BtnPlaylist_Click(object sender, RoutedEventArgs e)
         {
+            continueAfterError = 0;
             if (btnVideo.IsChecked != null)
             {
                 PlaylistWindow playlistWindow = new PlaylistWindow((bool)btnVideo.IsChecked);
@@ -152,6 +152,7 @@ namespace Media_Player
                 {
                     if (playlistWindow.FinalResult.Last() == "(obrázky)")
                     {
+                        PicturesPreviewReset();
                         playlistWindow.FinalResult.Remove(playlistWindow.FinalResult.Last());
                         foreach (var item in playlistWindow.FinalResult)
                         {
@@ -163,10 +164,6 @@ namespace Media_Player
                             lbPreviews.SelectedIndex = 0;
                             lbPreviews.Visibility = Visibility.Visible;
                             tbPicturesCount.Text = lbPreviews.Items.Count + "x ";
-                        }
-                        else
-                        {
-                            PicturesPreviewReset();
                         }
                         if (lbPreviews.Items.Count == 1)
                         {
@@ -188,79 +185,42 @@ namespace Media_Player
 
         private void TryShowPicture(string picturePath)
         {
-            MessageBoxResult result = 0;
             try
             {
-                if (!File.Exists(picturePath))
-                {
-                    throw new FileNotFoundException(picturePath);
-                }
                 imPicture.Source = new BitmapImage(new Uri(picturePath));
                 CombineFilenames(IOPath.GetFileName(picturePath));
             }
             catch
             {
-                if (result == 0)
+                if (lbPreviews.Items.Count == 0 )
                 {
-                    if (lbPreviews.SelectedItem != null && lbPreviews.SelectedIndex < lbPreviews.Items.Count - 1)
+                    MessageBox.Show("Položka nenalezena či nelze spustit..." + Environment.NewLine + picturePath);
+                }
+                else if(lbPreviews.SelectedIndex == lbPreviews.Items.Count -1)
+                {
+                    MessageBox.Show("Poslední položka playlist nenalezena či nelze spustit..." + Environment.NewLine + picturePath);
+                    lbPreviews.Items.Remove(lbPreviews.SelectedItem);
+                    lbPreviews.SelectedIndex = lbPreviews.Items.Count - 1;
+                }
+                else
+                {
+                    if (continueAfterError == 0)
                     {
-                        result = MessageBox.Show("Některé z položek Playlistu nenalezeny či je nelze spustit..." + Environment.NewLine
-                                             + $"Od: {picturePath}" + Environment.NewLine + "Přejete si pokračovat?",
-                                             "Chyba spuštění", MessageBoxButton.YesNo);
+                        continueAfterError = MessageBox.Show("Některé z položek Playlistu nenalezeny či je nelze spustit..." 
+                                                            + Environment.NewLine + $"Od: {picturePath}" + Environment.NewLine 
+                                                            + "Přejete si pokračovat?", "Chyba spuštění", MessageBoxButton.YesNo);
+                        if(continueAfterError == MessageBoxResult.No)
+                        {
+                            lbPreviews.Items.Clear();
+                            imPicture.Source = null;
+                            return;
+                        }
                     }
-                    else
-                    {
-                        MessageBox.Show($"Položka {picturePath} nenalezena či nelze spustit...");
-                        return;
-                    }
+                    int tempIndex = lbPreviews.SelectedIndex;
+                    lbPreviews.Items.Remove(lbPreviews.SelectedItem);
+                    lbPreviews.SelectedIndex = tempIndex;
                 }
-                switch (result)
-                {
-                    case MessageBoxResult.Yes:
-                        int tempIndex = lbPreviews.SelectedIndex;
-                        lbPreviews.Items.Remove(lbPreviews.SelectedItem);
-                        lbPreviews.SelectedIndex = tempIndex;
-                        picturePath = (string)lbPreviews.SelectedItem; break;
-                    case MessageBoxResult.No:
-                        imPicture.Source = null;
-                        PicturesPreviewReset(); return;
-                }
-            }
-        }
-
-        private void TryPlayMedia(string mediaPath)
-        {
-            MessageBoxResult result;
-            bool sourceAssigned = false;
-            string errorMessage = string.Empty;
-            if (File.Exists(mediaPath))
-            {
-                try
-                {
-                    mePlayer.Source = new Uri(mediaPath);
-                    CombineFilenames(IOPath.GetFileName(mediaPath));
-                    slProgress.Value = 0;
-                    sourceAssigned = true;
-                }
-                catch
-                {
-                    errorMessage = $"Položka {mediaPath} nelze spustit." + Environment.NewLine + "Přejete si pokračovat?";
-                }
-            }
-            else
-            {
-                errorMessage = $"Položka {mediaPath} nenalezena" + Environment.NewLine + "Přejete si pokračovat?";
-            }
-            if (!sourceAssigned)
-            {
-                result = MessageBox.Show(errorMessage, "Chyba spuštění", MessageBoxButton.YesNo);
-                switch (result)
-                {
-                    case MessageBoxResult.Yes: ChangePlaylistItem(mediaPlaylist.Count - 1, 1); break;
-                    case MessageBoxResult.No:
-                        mePlayer.Source = null;
-                        MediaChangeReset(); break;
-                }
+                
             }
         }
 
