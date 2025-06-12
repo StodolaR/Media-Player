@@ -26,6 +26,15 @@ namespace Media_Player
         private int countdown;
         private bool positionAdjustment;
         private int playlistIndex;
+        private int PlaylistIndex
+        {
+            get => playlistIndex;
+            set
+            {
+                playlistIndex = value;
+                PlaylistIndexChanged();
+            }
+        }
         private List<string> mediaPlaylist;
         MessageBoxResult continueAfterError = 0;
         public const string videoExtensions = "mov;mp4;avi;wmv";
@@ -83,22 +92,26 @@ namespace Media_Player
 
         private void btnVideo_Checked(object sender, RoutedEventArgs e)
         {
-            PicturesPreviewReset();;
-            imPicture.Source = null;
+            PicturesPreviewReset();
             MediaChangeReset();
         }
-
+        
         private void MediaChangeReset()
         {
             mePlayer.Source = null;
+            MediaControlsReset();
+            playlistIndex = -1;
+            mediaPlaylist.Clear();
+            tbProgressTime.Text = "0:00:00/0:00:00";
+            CombineFilenames("");
+        }
+
+        private void MediaControlsReset()
+        {
             btnPause.IsChecked = false;
             btnPause.IsEnabled = false;
             slProgress.Value = 0;
             slProgress.IsEnabled = false;
-            playlistIndex = 0;
-            mediaPlaylist.Clear();
-            tbProgressTime.Text = "0:00:00/0:00:00";
-            CombineFilenames("");
         }
 
         private void PicturesPreviewReset()
@@ -107,6 +120,7 @@ namespace Media_Player
             spSlideshow.Visibility = Visibility.Collapsed;
             lbPreviews.Items.Clear();
             lbPreviews.Visibility = Visibility.Collapsed;
+            imPicture.Source = null;
             CombineFilenames("");
         }
 
@@ -119,7 +133,7 @@ namespace Media_Player
                 if(ofd.ShowDialog() == true)
                 {
                     mediaPlaylist.Add(ofd.FileName);
-                    SetPanelAndPlay(ofd.FileName);
+                    SetPanelAndPlay();
                 }
             }
             else
@@ -130,7 +144,7 @@ namespace Media_Player
                     if(ofd.FileName.EndsWith("mp3"))
                     {
                         mediaPlaylist.Add(ofd.FileName);
-                        SetPanelAndPlay(ofd.FileName);
+                        SetPanelAndPlay();
                     }
                     else
                     {
@@ -143,7 +157,6 @@ namespace Media_Player
 
         private void BtnPlaylist_Click(object sender, RoutedEventArgs e)
         {
-            continueAfterError = 0;
             if (btnVideo.IsChecked != null)
             {
                 PlaylistWindow playlistWindow = new PlaylistWindow((bool)btnVideo.IsChecked);
@@ -176,7 +189,7 @@ namespace Media_Player
                         mediaPlaylist = playlistWindow.FinalResult;
                         if (mediaPlaylist.Count > 0)
                         {
-                            SetPanelAndPlay(mediaPlaylist[0]);
+                            SetPanelAndPlay();
                         }
                     }
                 }
@@ -187,6 +200,10 @@ namespace Media_Player
         {
             try
             {
+                if(!File.Exists(picturePath))
+                {
+                    throw new FileNotFoundException();
+                }
                 imPicture.Source = new BitmapImage(new Uri(picturePath));
                 CombineFilenames(IOPath.GetFileName(picturePath));
             }
@@ -199,8 +216,9 @@ namespace Media_Player
                 else if(lbPreviews.SelectedIndex == lbPreviews.Items.Count -1)
                 {
                     MessageBox.Show("Poslední položka playlist nenalezena či nelze spustit..." + Environment.NewLine + picturePath);
-                    lbPreviews.Items.Remove(lbPreviews.SelectedItem);
+                    lbPreviews.Items.Remove(lbPreviews.Items[lbPreviews.SelectedIndex]);
                     lbPreviews.SelectedIndex = lbPreviews.Items.Count - 1;
+                    StopSlideshow();
                 }
                 else
                 {
@@ -211,16 +229,71 @@ namespace Media_Player
                                                             + "Přejete si pokračovat?", "Chyba spuštění", MessageBoxButton.YesNo);
                         if(continueAfterError == MessageBoxResult.No)
                         {
-                            lbPreviews.Items.Clear();
-                            imPicture.Source = null;
+                            PicturesPreviewReset();
+                            continueAfterError = 0;
                             return;
                         }
                     }
                     int tempIndex = lbPreviews.SelectedIndex;
-                    lbPreviews.Items.Remove(lbPreviews.SelectedItem);
+                    lbPreviews.Items.Remove(lbPreviews.Items[lbPreviews.SelectedIndex]);
                     lbPreviews.SelectedIndex = tempIndex;
                 }
-                
+                continueAfterError = 0;
+            }
+        }
+
+        private void TryPlayMedia(string mediaPath)
+        {
+            try
+            {
+                if (!File.Exists(mediaPath))
+                {
+                    throw new FileNotFoundException();
+                }
+                mePlayer.Source = new Uri(mediaPath);
+                slProgress.Value = 0;
+                CombineFilenames(IOPath.GetFileName(mediaPath));
+            }
+            catch
+            {
+                if (mediaPlaylist.Count == 0)
+                {
+                    MessageBox.Show("Položka nenalezena či nelze spustit..." + Environment.NewLine + mediaPath);
+                }
+                else if (PlaylistIndex == mediaPlaylist.Count - 1)
+                {
+                    MessageBox.Show("Poslední položka playlist nenalezena či nelze spustit..." + Environment.NewLine + mediaPath);
+                    mediaPlaylist.Remove(mediaPlaylist[PlaylistIndex]);
+                    PlaylistIndex = mediaPlaylist.Count - 1;
+                    MoveMediaToEnd();
+                }
+                else
+                {
+                    if (continueAfterError == 0)
+                    {
+                        continueAfterError = MessageBox.Show("Některé z položek Playlistu nenalezeny či je nelze spustit..."
+                                                            + Environment.NewLine + $"Od: {mediaPath}" + Environment.NewLine
+                                                            + "Přejete si pokračovat?", "Chyba spuštění", MessageBoxButton.YesNo);
+                        if (continueAfterError == MessageBoxResult.No)
+                        {
+                            MediaChangeReset();
+                            continueAfterError = 0;
+                            return;
+                        }
+                    }
+                    int tempIndex = PlaylistIndex;
+                    mediaPlaylist.Remove(mediaPlaylist[PlaylistIndex]);
+                    PlaylistIndex = tempIndex;
+                }
+                continueAfterError = 0;
+            }
+        }
+
+        private void MoveMediaToEnd()
+        {
+            if (PlaylistIndex >= 0)
+            {
+                slProgress.Value = slProgress.Maximum - 0.1;
             }
         }
 
@@ -244,13 +317,12 @@ namespace Media_Player
             return filterString + "|" + filterString;
         }
 
-        private void SetPanelAndPlay(string fileName)
+        private void SetPanelAndPlay()
         {
             btnPause.IsChecked = false;
             btnPause.IsEnabled = true;
-            TryPlayMedia(fileName);
-            playlistIndex = 0;
             slProgress.IsEnabled = true;
+            PlaylistIndex = 0;
             mePlayer.Play();
         }
         private void CombineFilenames(string fileName)
@@ -293,9 +365,20 @@ namespace Media_Player
 
         private void ChangePlaylistItem(int limitPosition, int increment)
         {
-            if ((playlistIndex) == limitPosition) return;
-            playlistIndex += increment;
-            TryPlayMedia(mediaPlaylist[playlistIndex]);
+            if ((PlaylistIndex) == limitPosition) return;
+            PlaylistIndex += increment;
+        }
+
+        private void PlaylistIndexChanged()
+        {
+            if (PlaylistIndex >= 0)
+            {
+                TryPlayMedia(mediaPlaylist[PlaylistIndex]);
+            }
+            else
+            {
+                MediaControlsReset();
+            }
         }
 
         private void SlProgress_DragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e)
