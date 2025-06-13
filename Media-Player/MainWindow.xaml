@@ -11,9 +11,9 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <MediaElement Name="mePlayer" LoadedBehavior="Manual" MediaEnded="NextPlaylistItem"/>
+        <MediaElement Name="mePlayer" LoadedBehavior="Manual" MediaEnded="NextPlaylistItem" MediaFailed="mePlayer_MediaFailed"/>
         <DockPanel x:Name="dPPictures">
-            <ListBox x:Name="lbPreviews" DockPanel.Dock="Right" Visibility="Collapsed" SelectionChanged="LbPreviews_SelectionChanged">
+            <ListBox x:Name="lbPreviews" DockPanel.Dock="Right" Visibility="Collapsed" SelectedIndex="{Binding PictureIndex}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Image Source="{Binding}" Width="60" Margin="2" />

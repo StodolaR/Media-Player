@@ -1,5 +1,8 @@
 ﻿using Microsoft.Win32;
+using System;
+using System.ComponentModel;
 using System.IO;
+using System.IO.Packaging;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -20,31 +23,47 @@ namespace Media_Player
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
         private int slideshowInterval;
         private int countdown;
         private bool positionAdjustment;
-        private int playlistIndex;
-        private int PlaylistIndex
+        private int mediaIndex;
+        private int pictureIndex;
+        private int MediaIndex
         {
-            get => playlistIndex;
+            get => mediaIndex;
             set
             {
-                playlistIndex = value;
-                PlaylistIndexChanged();
+                mediaIndex = value;
+                MediaIndexChanged();
+            }
+        }
+        public int PictureIndex
+        {
+            get => pictureIndex;
+            set
+            {
+                pictureIndex = value;
+                PictureIndexChanged();
+                OnPropertyChanged(nameof(PictureIndex));
             }
         }
         private List<string> mediaPlaylist;
+        private List<string> picturePlaylist;
         MessageBoxResult continueAfterError = 0;
         public const string videoExtensions = "mov;mp4;avi;wmv";
         public const string audioExtensions = "mp3"; // přípona použita jako podmínka v metodě BtnOpen_Click !
         public const string pictureExtensions = "jpg;png;gif;tif;bmp";
+        public event PropertyChangedEventHandler? PropertyChanged;
+
         public MainWindow()
         {
             InitializeComponent();
             mediaPlaylist = new List<string>();
+            picturePlaylist = new List<string>();
             mePlayer.Volume = slVolume.Value;
+            DataContext = this;
             DispatcherTimer timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(1);
             timer.Tick += Timer_Tick;
@@ -60,12 +79,12 @@ namespace Media_Player
             }
             if(slideshowInterval > 0)
             {
-                if(countdown == 0)
+                if(countdown < 1)
                 {
                     countdown = slideshowInterval;
-                    if(lbPreviews.SelectedIndex < lbPreviews.Items.Count - 1)
+                    if(PictureIndex < picturePlaylist.Count - 1)
                     {
-                        lbPreviews.SelectedIndex++;
+                        PictureIndex++;
                     }
                     else
                     {
@@ -75,6 +94,7 @@ namespace Media_Player
                 }
                 countdown--;
             }
+            continueAfterError = 0;
         }
 
         private void StopSlideshow()
@@ -100,10 +120,10 @@ namespace Media_Player
         {
             mePlayer.Source = null;
             MediaControlsReset();
-            playlistIndex = -1;
+            mediaIndex = -1;
             mediaPlaylist.Clear();
             tbProgressTime.Text = "0:00:00/0:00:00";
-            CombineFilenames("");
+            CombineFilenames();
         }
 
         private void MediaControlsReset()
@@ -118,10 +138,12 @@ namespace Media_Player
         {
             StopSlideshow();
             spSlideshow.Visibility = Visibility.Collapsed;
-            lbPreviews.Items.Clear();
+            pictureIndex = -1;
+            picturePlaylist.Clear();
+            lbPreviews.Items.Refresh();
             lbPreviews.Visibility = Visibility.Collapsed;
             imPicture.Source = null;
-            CombineFilenames("");
+            CombineFilenames();
         }
 
         private void BtnOpen_Click(object sender, RoutedEventArgs e)
@@ -134,6 +156,7 @@ namespace Media_Player
                 {
                     mediaPlaylist.Add(ofd.FileName);
                     SetPanelAndPlay();
+                    mediaPlaylist.Clear();
                 }
             }
             else
@@ -145,6 +168,7 @@ namespace Media_Player
                     {
                         mediaPlaylist.Add(ofd.FileName);
                         SetPanelAndPlay();
+                        mediaPlaylist.Clear();
                     }
                     else
                     {
@@ -152,156 +176,6 @@ namespace Media_Player
                         TryShowPicture(ofd.FileName);
                     }
                 }
-            }
-        }
-
-        private void BtnPlaylist_Click(object sender, RoutedEventArgs e)
-        {
-            if (btnVideo.IsChecked != null)
-            {
-                PlaylistWindow playlistWindow = new PlaylistWindow((bool)btnVideo.IsChecked);
-                playlistWindow.Closing += PlaylistWindow_Closing;
-                if (playlistWindow.ShowDialog() == true)
-                {
-                    if (playlistWindow.FinalResult.Last() == "(obrázky)")
-                    {
-                        PicturesPreviewReset();
-                        playlistWindow.FinalResult.Remove(playlistWindow.FinalResult.Last());
-                        foreach (var item in playlistWindow.FinalResult)
-                        {
-                            lbPreviews.Items.Add(item);
-                        }
-                        if (lbPreviews.Items.Count > 1)
-                        {
-                            spSlideshow.Visibility = Visibility.Visible;
-                            lbPreviews.SelectedIndex = 0;
-                            lbPreviews.Visibility = Visibility.Visible;
-                            tbPicturesCount.Text = lbPreviews.Items.Count + "x ";
-                        }
-                        if (lbPreviews.Items.Count == 1)
-                        {
-                            TryShowPicture((string)lbPreviews.Items[0]);
-                        }
-                    }
-                    else
-                    {
-                        playlistWindow.FinalResult.Remove(playlistWindow.FinalResult.Last());
-                        mediaPlaylist = playlistWindow.FinalResult;
-                        if (mediaPlaylist.Count > 0)
-                        {
-                            SetPanelAndPlay();
-                        }
-                    }
-                }
-            }
-        }
-
-        private void TryShowPicture(string picturePath)
-        {
-            try
-            {
-                if(!File.Exists(picturePath))
-                {
-                    throw new FileNotFoundException();
-                }
-                imPicture.Source = new BitmapImage(new Uri(picturePath));
-                CombineFilenames(IOPath.GetFileName(picturePath));
-            }
-            catch
-            {
-                if (lbPreviews.Items.Count == 0 )
-                {
-                    MessageBox.Show("Položka nenalezena či nelze spustit..." + Environment.NewLine + picturePath);
-                }
-                else if(lbPreviews.SelectedIndex == lbPreviews.Items.Count -1)
-                {
-                    MessageBox.Show("Poslední položka playlist nenalezena či nelze spustit..." + Environment.NewLine + picturePath);
-                    lbPreviews.Items.Remove(lbPreviews.Items[lbPreviews.SelectedIndex]);
-                    lbPreviews.SelectedIndex = lbPreviews.Items.Count - 1;
-                    StopSlideshow();
-                }
-                else
-                {
-                    if (continueAfterError == 0)
-                    {
-                        continueAfterError = MessageBox.Show("Některé z položek Playlistu nenalezeny či je nelze spustit..." 
-                                                            + Environment.NewLine + $"Od: {picturePath}" + Environment.NewLine 
-                                                            + "Přejete si pokračovat?", "Chyba spuštění", MessageBoxButton.YesNo);
-                        if(continueAfterError == MessageBoxResult.No)
-                        {
-                            PicturesPreviewReset();
-                            continueAfterError = 0;
-                            return;
-                        }
-                    }
-                    int tempIndex = lbPreviews.SelectedIndex;
-                    lbPreviews.Items.Remove(lbPreviews.Items[lbPreviews.SelectedIndex]);
-                    lbPreviews.SelectedIndex = tempIndex;
-                }
-                continueAfterError = 0;
-            }
-        }
-
-        private void TryPlayMedia(string mediaPath)
-        {
-            try
-            {
-                if (!File.Exists(mediaPath))
-                {
-                    throw new FileNotFoundException();
-                }
-                mePlayer.Source = new Uri(mediaPath);
-                slProgress.Value = 0;
-                CombineFilenames(IOPath.GetFileName(mediaPath));
-            }
-            catch
-            {
-                if (mediaPlaylist.Count == 0)
-                {
-                    MessageBox.Show("Položka nenalezena či nelze spustit..." + Environment.NewLine + mediaPath);
-                }
-                else if (PlaylistIndex == mediaPlaylist.Count - 1)
-                {
-                    MessageBox.Show("Poslední položka playlist nenalezena či nelze spustit..." + Environment.NewLine + mediaPath);
-                    mediaPlaylist.Remove(mediaPlaylist[PlaylistIndex]);
-                    PlaylistIndex = mediaPlaylist.Count - 1;
-                    MoveMediaToEnd();
-                }
-                else
-                {
-                    if (continueAfterError == 0)
-                    {
-                        continueAfterError = MessageBox.Show("Některé z položek Playlistu nenalezeny či je nelze spustit..."
-                                                            + Environment.NewLine + $"Od: {mediaPath}" + Environment.NewLine
-                                                            + "Přejete si pokračovat?", "Chyba spuštění", MessageBoxButton.YesNo);
-                        if (continueAfterError == MessageBoxResult.No)
-                        {
-                            MediaChangeReset();
-                            continueAfterError = 0;
-                            return;
-                        }
-                    }
-                    int tempIndex = PlaylistIndex;
-                    mediaPlaylist.Remove(mediaPlaylist[PlaylistIndex]);
-                    PlaylistIndex = tempIndex;
-                }
-                continueAfterError = 0;
-            }
-        }
-
-        private void MoveMediaToEnd()
-        {
-            if (PlaylistIndex >= 0)
-            {
-                slProgress.Value = slProgress.Maximum - 0.1;
-            }
-        }
-
-        private void PlaylistWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
-        {
-            if (sender != null)
-            {
-                ((PlaylistWindow)sender).SerializePlaylists();
             }
         }
 
@@ -317,27 +191,150 @@ namespace Media_Player
             return filterString + "|" + filterString;
         }
 
+        private void BtnPlaylist_Click(object sender, RoutedEventArgs e)
+        {
+            if (btnVideo.IsChecked != null)
+            {
+                PlaylistWindow playlistWindow = new PlaylistWindow((bool)btnVideo.IsChecked);
+                playlistWindow.Closing += PlaylistWindow_Closing;
+                if (playlistWindow.ShowDialog() == true)
+                {
+                    if (playlistWindow.FinalResult.Last() == "(obrázky)")
+                    {
+                        PicturesPreviewReset();
+                        playlistWindow.FinalResult.Remove(playlistWindow.FinalResult.Last());
+                        picturePlaylist = playlistWindow.FinalResult;
+                        lbPreviews.ItemsSource = picturePlaylist;
+                        if (picturePlaylist.Count > 1)
+                        {
+                            spSlideshow.Visibility = Visibility.Visible;
+                            PictureIndex = 0;
+                            lbPreviews.Visibility = Visibility.Visible;
+                            tbPicturesCount.Text = picturePlaylist.Count + "x ";
+                        }
+                        if (picturePlaylist.Count == 1)
+                        {
+                            TryShowPicture(picturePlaylist[0]);
+                        }
+                    }
+                    else
+                    {
+                        playlistWindow.FinalResult.Remove(playlistWindow.FinalResult.Last());
+                        mediaPlaylist = playlistWindow.FinalResult;
+                        if (mediaPlaylist.Count > 0)
+                        {
+                            SetPanelAndPlay();
+                        }
+                    }
+                }
+            }
+        }
+
         private void SetPanelAndPlay()
         {
             btnPause.IsChecked = false;
             btnPause.IsEnabled = true;
             slProgress.IsEnabled = true;
-            PlaylistIndex = 0;
+            MediaIndex = 0;
             mePlayer.Play();
         }
-        private void CombineFilenames(string fileName)
+
+        private void PlaylistWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (imPicture.Source != null && mePlayer.Source != null)
+            if (sender != null)
             {
-                tbFilename.Text = IOPath.GetFileName(mePlayer.Source.ToString()) + "/" + IOPath.GetFileName(imPicture.Source.ToString());
+                ((PlaylistWindow)sender).SerializePlaylists();
             }
-            else if (imPicture.Source == null && mePlayer.Source == null)
+        }
+
+        private void TryShowPicture(string picturePath)
+        {
+            try
             {
-                tbFilename.Text = "Název souboru";
+                imPicture.Source = new BitmapImage(new Uri(picturePath));
+                CombineFilenames();
+            }
+            catch
+            {
+                ShowErrorMessage(true, picturePath, picturePlaylist, PictureIndex, StopSlideshow, PicturesPreviewReset);
+            }
+        }
+
+        private void mePlayer_MediaFailed(object sender, ExceptionRoutedEventArgs e)
+        {
+            string mediaPath = mePlayer.Source.ToString();
+            mePlayer.Source = null;
+            CombineFilenames();
+            ShowErrorMessage(false, mediaPath, mediaPlaylist, MediaIndex, MoveMediaToEnd, MediaChangeReset);
+        }
+
+        private void ShowErrorMessage(bool isPicture, string path, List<string> playlist,int index, Action endPlayback, Action reset)
+        {
+            if (playlist.Count == 0)
+            {
+                MessageBox.Show("Soubor poškozen, nelze spustit..." + Environment.NewLine + path);
+                reset();
+            }
+            else if (index == playlist.Count - 1)
+            {
+                MessageBox.Show("Poslední položka playlistu nenalezena či nelze spustit..." + Environment.NewLine + path);
+                playlist.RemoveAt(index);
+                lbPreviews.Items.Refresh();
+                SetOriginalIndex(isPicture, playlist.Count - 1);
+                endPlayback();
             }
             else
             {
-                tbFilename.Text = fileName;
+                if (continueAfterError == 0)
+                {
+                    continueAfterError = MessageBox.Show("Některé z položek Playlistu nenalezeny či je nelze spustit..."
+                                                        + Environment.NewLine + $"Od: {path}" + Environment.NewLine
+                                                        + "Přejete si pokračovat?", "Chyba spuštění", MessageBoxButton.YesNo);
+                    if (continueAfterError == MessageBoxResult.No)
+                    {
+                        reset();
+                        continueAfterError = 0;
+                        return;
+                    }
+                }
+                playlist.RemoveAt(index);
+                lbPreviews.Items.Refresh();
+                SetOriginalIndex(isPicture, index);
+            }
+        }
+
+        private void CombineFilenames()
+        {
+            if (mePlayer.Source != null)
+            {
+                if (imPicture.Source != null)
+                {
+                    tbFilename.Text = IOPath.GetFileName(mePlayer.Source.ToString()) + "/" + IOPath.GetFileName(imPicture.Source.ToString());
+                }
+                else
+                {
+                    tbFilename.Text = IOPath.GetFileName(mePlayer.Source.ToString());
+                }
+            }
+            else if (imPicture.Source != null)
+            {
+                tbFilename.Text = IOPath.GetFileName(imPicture.Source.ToString());
+            }
+            else
+            {
+                tbFilename.Text = "Název souboru";
+            }
+        }
+
+        private void SetOriginalIndex(bool isPicture, int Value)
+        {
+            if (isPicture)
+            {
+                PictureIndex = Value;
+            }
+            else
+            {
+                MediaIndex = Value;
             }
         }
 
@@ -365,19 +362,32 @@ namespace Media_Player
 
         private void ChangePlaylistItem(int limitPosition, int increment)
         {
-            if ((PlaylistIndex) == limitPosition) return;
-            PlaylistIndex += increment;
+            if (MediaIndex == limitPosition || MediaIndex == -1) return;
+            MediaIndex += increment;
         }
 
-        private void PlaylistIndexChanged()
+        private void MediaIndexChanged()
         {
-            if (PlaylistIndex >= 0)
+            if (MediaIndex >= 0)
             {
-                TryPlayMedia(mediaPlaylist[PlaylistIndex]);
+                mePlayer.Source = new Uri(mediaPlaylist[mediaIndex]);
+                CombineFilenames();
             }
             else
             {
                 MediaControlsReset();
+            }
+        }
+
+        private void MoveMediaToEnd()
+        {
+            if (MediaIndex >= 0)
+            {
+                slProgress.Value = slProgress.Maximum - 0.1;
+            }
+            else
+            {
+                MediaChangeReset();
             }
         }
 
@@ -407,11 +417,11 @@ namespace Media_Player
             mePlayer.Volume = slVolume.Value;
         }
 
-        private void LbPreviews_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void PictureIndexChanged()
         {
-            if (lbPreviews.SelectedItem != null)
+            if (PictureIndex >= 0)
             {
-                TryShowPicture((string)lbPreviews.SelectedItem);
+                TryShowPicture(picturePlaylist[pictureIndex]);
             }
         }
 
@@ -467,6 +477,14 @@ namespace Media_Player
             Visibility backupVisibility = dpControlPanel.Visibility;
             dpControlPanel.Visibility = btnShowPanel.Visibility;
             btnShowPanel.Visibility = backupVisibility;
+        }
+
+        private void OnPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
     }
 }
