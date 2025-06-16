@@ -157,9 +157,11 @@ namespace Media_Player
                 ofd.Filter = GetFilterString(videoExtensions);
                 if(ofd.ShowDialog() == true)
                 {
+                    mediaPlaylist.Clear();
                     mediaPlaylist.Add(ofd.FileName);
                     SetPanelAndPlay();
                     mediaPlaylist.Clear();
+                    mediaIndex = -1;
                 }
             }
             else
@@ -169,9 +171,11 @@ namespace Media_Player
                 {
                     if(ofd.FileName.EndsWith("mp3"))
                     {
+                        mediaPlaylist.Clear();
                         mediaPlaylist.Add(ofd.FileName);
                         SetPanelAndPlay();
                         mediaPlaylist.Clear();
+                        mediaIndex = -1;
                     }
                     else
                     {
@@ -228,6 +232,10 @@ namespace Media_Player
                         {
                             SetPanelAndPlay();
                         }
+                        else
+                        {
+                            MediaChangeReset();
+                        }
                     }
                 }
             }
@@ -273,7 +281,7 @@ namespace Media_Player
 
         private void ShowErrorMessage(bool isPicture, string path, List<string> playlist,int index, Action endPlayback, Action reset)
         {
-            if (playlist.Count == 0)
+            if (index < 0)
             {
                 MessageBox.Show("Soubor poškozen, nelze spustit..." + Environment.NewLine + path);
                 reset();
@@ -374,6 +382,7 @@ namespace Media_Player
             if (MediaIndex >= 0)
             {
                 mePlayer.Source = new Uri(mediaPlaylist[mediaIndex]);
+                slProgress.Value = 0;
                 CombineFilenames();
             }
             else
