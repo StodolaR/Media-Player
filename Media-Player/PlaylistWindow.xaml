@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Media_Player"
         mc:Ignorable="d"
         Title="PlaylistWindow" Height="450" Width="800"  MinHeight="350" MinWidth="500">
-    <Grid Margin="5" Background="{StaticResource playlistBackground}">
+    <Grid Margin="5" x:Name="grBackground">
         <DockPanel>
             <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
                 <TextBlock Text="PLAYLIST" FontSize="25" FontFamily="Wide Latin" Margin="20,5" Foreground="Gold"/>
@@ -40,7 +40,7 @@
                 </WrapPanel>
             </StackPanel>
             <ListBox x:Name="lbPlaylists" DockPanel.Dock="Left" Width="250" ItemsSource="{Binding ActualPlaylists}" Foreground="White" 
-                     SelectedItem="{Binding SelectedPlaylist}" Background="{StaticResource playlistBackground}">
+                     SelectedItem="{Binding SelectedPlaylist}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Name}"/>
@@ -66,8 +66,7 @@
                     </StackPanel>
                 </Border>
             </StackPanel>
-            <ListBox x:Name="lbFilenames" ItemsSource="{Binding SelectedPlaylist.Paths}" Foreground="White"
-                     Background="{StaticResource playlistBackground}"/>
+            <ListBox x:Name="lbFilenames" ItemsSource="{Binding SelectedPlaylist.Paths}" Foreground="White"/>
         </DockPanel>
     </Grid>
 </Window>

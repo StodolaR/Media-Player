@@ -52,9 +52,10 @@ namespace Media_Player
             }
         }
         public List<string> FinalResult { get; set; }
-        public PlaylistWindow(bool IsVideoPlaylist)
+        public PlaylistWindow(bool IsVideoPlaylist, LinearGradientBrush playlistBackground)
         {
             InitializeComponent();
+            grBackground.Background = lbFilenames.Background = lbPlaylists.Background = playlistBackground;
             allPlaylists = DeserializePlaylists();
             actualPlaylists = new ObservableCollection<Playlist>();
             if (IsVideoPlaylist)

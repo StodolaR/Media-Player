@@ -5,7 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Media_Player"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" MinWidth="520" MinHeight="120">
+        Title="MainWindow" Height="450" Width="800" MinWidth="530" MinHeight="120">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/BackgroundsContainer.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -94,9 +101,33 @@
             <Border  CornerRadius="0,0,11,11" DockPanel.Dock="Right" Width="100" Margin="0,3,3,9" Style="{StaticResource textboxBorder}" ToolTip="Čas přehrávání/celkový čas">
                 <TextBlock x:Name="tbProgressTime" Text="0:00:00/0:00:00" HorizontalAlignment="Center"/>
             </Border>
-            <Border CornerRadius="10" Margin="1,6" HorizontalAlignment="Center" MinWidth="300" ToolTip="Název přehrávaného souboru" Style="{StaticResource textboxBorder}">
-                <TextBlock x:Name="tbFilename" Text="Název souboru" HorizontalAlignment="Center"/>
-            </Border>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <StackPanel.Resources>
+                    <Style TargetType="Button">
+                        <Setter Property="Width" Value="10"/>
+                        <Setter Property="Height" Value="3"/>
+                        <Setter Property="Margin" Value="1"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Rectangle Fill="{TemplateBinding Background}"/>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <EventSetter Event="Click"  Handler="ChangeColors"/>
+                    </Style>
+                </StackPanel.Resources>
+                <Button Background="#888888"/>
+                <Button Background="#AA8888"/>
+                <Button Background="#88AA88"/>
+                <Button Background="#8888AA"/>
+                <Border CornerRadius="10" Margin="1,6" HorizontalAlignment="Center" MinWidth="300" ToolTip="Název přehrávaného souboru" Style="{StaticResource textboxBorder}">
+                    <TextBlock x:Name="tbFilename" Text="Název souboru" HorizontalAlignment="Center"/>
+                </Border>
+                <Button Background="#00FFFF"/>
+                <Button Background="#FF00FF"/>
+                <Button Background="#FFFF00"/>
+            </StackPanel>
         </DockPanel>
         <Button x:Name="btnShowPanel" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="HideOrShowPanel" 
                 Visibility="Collapsed" ToolTip="Zobrazení panelu" Margin="2">

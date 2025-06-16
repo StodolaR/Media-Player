@@ -25,6 +25,7 @@ namespace Media_Player
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
+        private LinearGradientBrush playlistBG;
         private int slideshowInterval;
         private int countdown;
         private bool positionAdjustment;
@@ -60,6 +61,7 @@ namespace Media_Player
         public MainWindow()
         {
             InitializeComponent();
+            playlistBG = (LinearGradientBrush)FindResource("playlistBackground");
             mediaPlaylist = new List<string>();
             picturePlaylist = new List<string>();
             mePlayer.Volume = slVolume.Value;
@@ -195,7 +197,7 @@ namespace Media_Player
         {
             if (btnVideo.IsChecked != null)
             {
-                PlaylistWindow playlistWindow = new PlaylistWindow((bool)btnVideo.IsChecked);
+                PlaylistWindow playlistWindow = new PlaylistWindow((bool)btnVideo.IsChecked, playlistBG);
                 playlistWindow.Closing += PlaylistWindow_Closing;
                 if (playlistWindow.ShowDialog() == true)
                 {
@@ -484,6 +486,28 @@ namespace Media_Player
             if (PropertyChanged != null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+
+        private void ChangeColors(object sender, RoutedEventArgs e)
+        {
+            AppColors appColors = new AppColors((SolidColorBrush)((Button)sender).Background);
+            LinearGradientBrush leftBGResource = (LinearGradientBrush)FindResource("leftSideBackground");
+            leftBGResource.GradientStops.Clear();
+            foreach (GradientStop stop in appColors.leftBG)
+            {
+                leftBGResource.GradientStops.Add(stop);
+            }
+            LinearGradientBrush rightBGResource = (LinearGradientBrush)FindResource("rightSideBackground");
+            rightBGResource.GradientStops.Clear();
+            foreach (GradientStop stop in appColors.rightBG)
+            {
+                rightBGResource.GradientStops.Add(stop);
+            }
+            playlistBG.GradientStops.Clear();
+            foreach (GradientStop stop in appColors.playlistBG)
+            {
+                playlistBG.GradientStops.Add(stop);
             }
         }
     }
