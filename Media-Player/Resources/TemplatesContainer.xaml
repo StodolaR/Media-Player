@@ -1,117 +1,136 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Style TargetType="Button">
+    <SolidColorBrush x:Key="pressedButton" Color="#997711"/>
+    <SolidColorBrush x:Key="unpressedButton" Color="#EECC44"/>
+    <Style x:Key="buttonColors" TargetType="Button">
+        <Setter Property="Background" Value="{DynamicResource unpressedButton}"/>
+        <Style.Triggers>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{DynamicResource pressedButton}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <Style x:Key="toggleButtonColors" TargetType="{x:Type ToggleButton}">
+        <Setter Property="Background" Value="{DynamicResource unpressedButton}"/>
+        <Style.Triggers>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter Property="Background" Value="{DynamicResource pressedButton}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <Style TargetType="Button" BasedOn="{StaticResource buttonColors}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Border x:Name="brdButton" CornerRadius="2" Background="Gold" Margin="3" BorderThickness="1" BorderBrush="DarkGoldenrod">
+                    <Border CornerRadius="2" Background="{TemplateBinding Background}" Margin="3" BorderThickness="1" 
+                            BorderBrush="{DynamicResource pressedButton}">
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2,0"/>
                     </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="brdButton" Property="Background" Value="DarkGoldenrod"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
-    <Style TargetType="ToggleButton">
+    <Style TargetType="ToggleButton" BasedOn="{StaticResource toggleButtonColors}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
-                    <Border x:Name="brdButton" CornerRadius="2" Background="Gold" Margin="3" BorderThickness="1" BorderBrush="DarkGoldenrod">
+                    <Border CornerRadius="2" Background="{TemplateBinding Background}" Margin="3" BorderThickness="1" 
+                            BorderBrush="{DynamicResource pressedButton}">
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2,0"/>
                     </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="brdButton" Property="Background" Value="DarkGoldenrod"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
-    <ControlTemplate x:Key="audioButton" TargetType="RadioButton">
-        <Border x:Name="brdAudioButton" CornerRadius="7,0,0,7" Background="Gold" Margin="3" BorderThickness="1" BorderBrush="DarkGoldenrod">
-            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        </Border>
-        <ControlTemplate.Triggers>
-            <Trigger Property="IsChecked" Value="True">
-                <Setter TargetName="brdAudioButton" Property="Background" Value="DarkGoldenrod"/>
-            </Trigger>
-        </ControlTemplate.Triggers>
-    </ControlTemplate>
-    <ControlTemplate x:Key="videoButton" TargetType="RadioButton">
-        <Border x:Name="brdAudioButton" CornerRadius="0,7,7,0" Background="Gold" Margin="3" BorderThickness="1" BorderBrush="DarkGoldenrod">
-            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        </Border>
-        <ControlTemplate.Triggers>
-            <Trigger Property="IsChecked" Value="True">
-                <Setter TargetName="brdAudioButton" Property="Background" Value="DarkGoldenrod"/>
-            </Trigger>
-        </ControlTemplate.Triggers>
-    </ControlTemplate>
-    <ControlTemplate x:Key="lastButton" TargetType="Button">
-        <Grid>
-            <Polygon x:Name="poLastButton" Points="0,13 15,26 15,0" Fill="Gold" HorizontalAlignment="Right" 
-                     VerticalAlignment="Center" Stroke="DarkGoldenrod" StrokeThickness="2"/>
-            <ContentPresenter HorizontalAlignment="Right" VerticalAlignment="Center"/>
-        </Grid>
-        <ControlTemplate.Triggers>
-            <Trigger Property="IsPressed" Value="True">
-                <Setter TargetName="poLastButton" Property="Fill" Value="DarkGoldenrod"/>
-            </Trigger>
-        </ControlTemplate.Triggers>
-    </ControlTemplate>
-    <ControlTemplate x:Key="pauseButton" TargetType="ToggleButton">
-        <Grid>
-            <Ellipse x:Name="elPauseButton" Width="40" Height="40" Fill="Gold" VerticalAlignment="Center" Stroke="DarkGoldenrod" 
-                     StrokeThickness="2"/>
-            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        </Grid>
-        <ControlTemplate.Triggers>
-            <Trigger Property="IsChecked" Value="True">
-                <Setter TargetName="elPauseButton" Property="Fill" Value="DarkGoldenrod"/>
-            </Trigger>
-        </ControlTemplate.Triggers>
-    </ControlTemplate>
-    <ControlTemplate x:Key="nextButton" TargetType="Button">
-        <Grid>
-            <Polygon x:Name="poNextButton" Points="0,0 0,26 15,13" Fill="Gold" VerticalAlignment="Center" 
-                     Stroke="DarkGoldenrod" StrokeThickness="2"/>
-            <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center"/>
-        </Grid>
-        <ControlTemplate.Triggers>
-            <Trigger Property="IsPressed" Value="True">
-                <Setter TargetName="poNextButton" Property="Fill" Value="DarkGoldenrod"/>
-            </Trigger>
-        </ControlTemplate.Triggers>
-    </ControlTemplate>
-    <ControlTemplate x:Key="upButton" TargetType="Button">
-        <Grid>
-            <Polygon x:Name="poUpButton" Points="0,20 40,0 80,20" Fill="Gold" VerticalAlignment="Center" HorizontalAlignment="Center"
-                 Stroke="DarkGoldenrod" StrokeThickness="1" Margin="2"/>
-            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="4"/>
-        </Grid>
-        <ControlTemplate.Triggers>
-            <Trigger Property="IsPressed" Value="True">
-                <Setter TargetName="poUpButton" Property="Fill" Value="DarkGoldenrod"/>
-            </Trigger>
-        </ControlTemplate.Triggers>
-    </ControlTemplate>
-    <ControlTemplate x:Key="downButton" TargetType="Button">
-        <Grid>
-            <Polygon x:Name="poDownButton" Points="0,0 40,20 80,0" Fill="Gold" VerticalAlignment="Center" HorizontalAlignment="Center"
-                 Stroke="DarkGoldenrod" StrokeThickness="1" Margin="2"/>
-            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Top" Margin="4"/>
-        </Grid>
-        <ControlTemplate.Triggers>
-            <Trigger Property="IsPressed" Value="True">
-                <Setter TargetName="poDownButton" Property="Fill" Value="DarkGoldenrod"/>
-            </Trigger>
-        </ControlTemplate.Triggers>
-    </ControlTemplate>
+    <Style x:Key="audioButton" TargetType="RadioButton" BasedOn="{StaticResource toggleButtonColors}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RadioButton">
+                    <Border CornerRadius="7,0,0,7" Background="{TemplateBinding Background}" Margin="3" BorderThickness="1" 
+                            BorderBrush="{DynamicResource pressedButton}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="videoButton" TargetType="RadioButton" BasedOn="{StaticResource toggleButtonColors}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RadioButton">
+                    <Border CornerRadius="0,7,7,0" Background="{TemplateBinding Background}" Margin="3" BorderThickness="1" 
+                            BorderBrush="{DynamicResource pressedButton}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="lastButton" TargetType="Button" BasedOn="{StaticResource buttonColors}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid>
+                        <Polygon Points="0,13 15,26 15,0" Fill="{TemplateBinding Background}" HorizontalAlignment="Right" 
+                                VerticalAlignment="Center" Stroke="{DynamicResource pressedButton}" StrokeThickness="2"/>
+                        <ContentPresenter HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="pauseButton" TargetType="ToggleButton" BasedOn="{StaticResource toggleButtonColors}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Grid>
+                        <Ellipse Width="40" Height="40" Fill="{TemplateBinding Background}" VerticalAlignment="Center" 
+                                 Stroke="{DynamicResource pressedButton}" StrokeThickness="2"/>
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="nextButton" TargetType="Button" BasedOn="{StaticResource buttonColors}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid>
+                        <Polygon Points="0,0 0,26 15,13" Fill="{TemplateBinding Background}" VerticalAlignment="Center" 
+                                 Stroke="{DynamicResource pressedButton}" StrokeThickness="2"/>
+                        <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="upButton" TargetType="Button" BasedOn="{StaticResource buttonColors}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid>
+                        <Polygon Points="0,20 40,0 80,20" Fill="{TemplateBinding Background}" VerticalAlignment="Center" Margin="2"
+                             HorizontalAlignment="Center" Stroke="{DynamicResource pressedButton}" StrokeThickness="1"/>
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="4"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="downButton" TargetType="Button" BasedOn="{StaticResource buttonColors}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid>
+                        <Polygon Points="0,0 40,20 80,0" Fill="{TemplateBinding Background}" VerticalAlignment="Center" Margin="2"
+                         HorizontalAlignment="Center" Stroke="{DynamicResource pressedButton}" StrokeThickness="1"/>
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Top" Margin="4"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
     <Style TargetType="Slider">
         <Setter Property="Template">
             <Setter.Value>

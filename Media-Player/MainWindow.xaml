@@ -41,14 +41,14 @@
                     <ColumnDefinition Width="50"/>
                     <ColumnDefinition Width="20"/>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="btnLast" Click="LastPlaylistItem" ToolTip="Předchozí položka" Template="{StaticResource lastButton}">
+                <Button x:Name="btnLast" Click="LastPlaylistItem" ToolTip="Předchozí položka" Style="{StaticResource lastButton}">
                     <Image Source="/Resources/Images/Rew.png" Width="12" Margin="0"/>
                 </Button>
                 <ToggleButton x:Name="btnPause" Grid.Column="1" IsEnabled="False" ToolTip="Pauza/spuštění" ToolTipService.ShowOnDisabled="True"
-                              Checked="BtnPause_Checked" Unchecked="BtnPause_Unchecked" Template="{StaticResource pauseButton}">
+                              Checked="BtnPause_Checked" Unchecked="BtnPause_Unchecked" Style="{StaticResource pauseButton}">
                     <Image Source="/Resources/Images/Pause.png" Width="15" x:Name="imPauseContent"/>
                 </ToggleButton>
-                <Button x:Name="btnNext"  Grid.Column="2" Click="NextPlaylistItem" Template="{StaticResource nextButton}" ToolTip="Následující položka">
+                <Button x:Name="btnNext"  Grid.Column="2" Click="NextPlaylistItem" Style="{StaticResource nextButton}" ToolTip="Následující položka">
                     <Image Source="/Resources/Images/Ff.png" Width="12" Margin="0"/>
                 </Button>
             </Grid>
@@ -66,11 +66,11 @@
                     <Image Source="/Resources/Images/Open.png"/>
                 </Button>
                 <RadioButton x:Name="btnVideo" DockPanel.Dock="Right" Checked="btnVideo_Checked" Width="35" 
-                             Template="{StaticResource videoButton}" ToolTip="Přepnutí do režimu video">
+                             Style="{StaticResource videoButton}" ToolTip="Přepnutí do režimu video">
                     <Image Source="/Resources/Images/Video.png"/>
                 </RadioButton>
                 <RadioButton x:Name="btnAudio" DockPanel.Dock="Right" IsChecked="True" Checked="btnAudio_Checked" 
-                             Template="{StaticResource audioButton}" ToolTip="Přepnutí do režimu audio + obrázky">
+                             Style="{StaticResource audioButton}" ToolTip="Přepnutí do režimu audio + obrázky">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/Images/Audio.png"/>
                         <TextBlock Text="/"/>
@@ -105,7 +105,7 @@
                 <StackPanel.Resources>
                     <Style TargetType="Button">
                         <Setter Property="Width" Value="10"/>
-                        <Setter Property="Height" Value="3"/>
+                        <Setter Property="Height" Value="4"/>
                         <Setter Property="Margin" Value="1"/>
                         <Setter Property="Template">
                             <Setter.Value>
@@ -117,16 +117,16 @@
                         <EventSetter Event="Click"  Handler="ChangeColors"/>
                     </Style>
                 </StackPanel.Resources>
-                <Button Background="#888888"/>
-                <Button Background="#AA8888"/>
-                <Button Background="#88AA88"/>
-                <Button Background="#8888AA"/>
+                <Button Background="#888888" Tag="backgroundColor"/>
+                <Button Background="#998899" Tag="backgroundColor"/>
+                <Button Background="#889999" Tag="backgroundColor"/>
+                <Button Background="#8888AA" Tag="backgroundColor"/>
                 <Border CornerRadius="10" Margin="1,6" HorizontalAlignment="Center" MinWidth="300" ToolTip="Název přehrávaného souboru" Style="{StaticResource textboxBorder}">
                     <TextBlock x:Name="tbFilename" Text="Název souboru" HorizontalAlignment="Center"/>
                 </Border>
-                <Button Background="#00FFFF"/>
-                <Button Background="#FF00FF"/>
-                <Button Background="#FFFF00"/>
+                <Button Background="#888811"/>
+                <Button Background="#AA6611"/>
+                <Button Background="#997711"/>
             </StackPanel>
         </DockPanel>
         <Button x:Name="btnShowPanel" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="HideOrShowPanel" 

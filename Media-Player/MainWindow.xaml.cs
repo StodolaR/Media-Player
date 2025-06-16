@@ -61,9 +61,10 @@ namespace Media_Player
         public MainWindow()
         {
             InitializeComponent();
-            playlistBG = (LinearGradientBrush)FindResource("playlistBackground");
+            playlistBG = (LinearGradientBrush)FindResource("playlistBackground"); 
             mediaPlaylist = new List<string>();
             picturePlaylist = new List<string>();
+            mediaIndex = pictureIndex = -1;
             mePlayer.Volume = slVolume.Value;
             DataContext = this;
             DispatcherTimer timer = new DispatcherTimer();
@@ -491,24 +492,38 @@ namespace Media_Player
 
         private void ChangeColors(object sender, RoutedEventArgs e)
         {
-            AppColors appColors = new AppColors((SolidColorBrush)((Button)sender).Background);
-            LinearGradientBrush leftBGResource = (LinearGradientBrush)FindResource("leftSideBackground");
-            leftBGResource.GradientStops.Clear();
-            foreach (GradientStop stop in appColors.leftBG)
+            Button colorButton = (Button)sender;
+            if((string)colorButton.Tag == "backgroundColor")
             {
-                leftBGResource.GradientStops.Add(stop);
+                AppColors appColors = new AppColors((SolidColorBrush)colorButton.Background);
+                LinearGradientBrush leftBGResource = (LinearGradientBrush)FindResource("leftSideBackground");
+                leftBGResource.GradientStops.Clear();
+                foreach (GradientStop stop in appColors.leftBG)
+                {
+                    leftBGResource.GradientStops.Add(stop);
+                }
+                LinearGradientBrush rightBGResource = (LinearGradientBrush)FindResource("rightSideBackground");
+                rightBGResource.GradientStops.Clear();
+                foreach (GradientStop stop in appColors.rightBG)
+                {
+                    rightBGResource.GradientStops.Add(stop);
+                }
+                playlistBG.GradientStops.Clear();
+                foreach (GradientStop stop in appColors.playlistBG)
+                {
+                    playlistBG.GradientStops.Add(stop);
+                }
             }
-            LinearGradientBrush rightBGResource = (LinearGradientBrush)FindResource("rightSideBackground");
-            rightBGResource.GradientStops.Clear();
-            foreach (GradientStop stop in appColors.rightBG)
-            {
-                rightBGResource.GradientStops.Add(stop);
+            else
+            { 
+                Color basicColor = ((SolidColorBrush)colorButton.Background).Color;
+                App.Current.Resources["pressedButton"] = (SolidColorBrush)colorButton.Background;
+                byte unpressedR = (byte)(basicColor.R + 80);
+                byte unpressedG = (byte)(basicColor.G + 80);
+                byte unpressedB = (byte)(basicColor.B + 48);
+                App.Current.Resources["unpressedButton"] = new SolidColorBrush(Color.FromRgb(unpressedR, unpressedG, unpressedB));
             }
-            playlistBG.GradientStops.Clear();
-            foreach (GradientStop stop in appColors.playlistBG)
-            {
-                playlistBG.GradientStops.Add(stop);
-            }
+            
         }
     }
 }
