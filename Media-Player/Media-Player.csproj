@@ -15,6 +15,7 @@
     <None Remove="Resources\Images\Delay.png" />
     <None Remove="Resources\Images\Ff.png" />
     <None Remove="Resources\Images\Maximize.png" />
+    <None Remove="Resources\Images\MediaPlayerIcon.ico" />
     <None Remove="Resources\Images\Open.png" />
     <None Remove="Resources\Images\Pause.png" />
     <None Remove="Resources\Images\Picture.png" />
@@ -40,6 +41,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Images\Maximize.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\MediaPlayerIcon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Images\Open.png">
